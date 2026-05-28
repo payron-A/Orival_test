@@ -1,5 +1,4 @@
 import { NavLink } from "react-router-dom";
-import { providers } from "../../data";
 import { useApp } from "../../context/AppContext";
 import { useApi } from "../../context/ApiContext";
 
@@ -47,7 +46,7 @@ function NavSection({ title, links }: { title: string; links: typeof discoverLin
 }
 
 export function Sidebar() {
-  const { user } = useApi();
+  const { user,providers} = useApi();
   const { followedProviderIds } = useApp();
   const followed = providers.filter((p) => followedProviderIds.has(p.id));
 

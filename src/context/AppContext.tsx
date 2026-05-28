@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { useApi } from "./ApiContext";
 import { notifications as seedNotifications } from "../data";
-
+import { api } from "../lib/api";
 interface AppState {
   followedProviderIds: Set<string>;
   unreadNotificationCount: number;
@@ -21,12 +21,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [followedProviderIds, setFollowedProviderIds] = useState<Set<string>>(new Set(
     user?.following)
   );
-  const toggleFollowProvider = (providerId: string) =>
+  const toggleFollowProvider = async (providerId: string) => {
+    const isFollowing = followedProviderIds.has(providerId);
+    await api(`/providers/${providerId}/follow`, { method: isFollowing ? "DELETE" : "POST" });
     setFollowedProviderIds((prev) => {
       const next = new Set(prev);
-      next.has(providerId) ? next.delete(providerId) : next.add(providerId);
+      isFollowing ? next.delete(providerId) : next.add(providerId);
       return next;
-  });
+    });
+  };
   useEffect(()=>{
     if(user) return setUser({...user,following:[...followedProviderIds]});
   },[followedProviderIds])

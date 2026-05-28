@@ -2006,8 +2006,8 @@ video {
     grid-template-columns: repeat(6, minmax(0, 1fr));
   }
 
-  .lg\:grid-cols-\[1\.3fr_1fr\] {
-    grid-template-columns: 1.3fr 1fr;
+  .lg\:grid-cols-\[1\.3fr_0\.5fr\] {
+    grid-template-columns: 1.3fr 0.5fr;
   }
 
   .lg\:grid-cols-\[1fr_360px\] {

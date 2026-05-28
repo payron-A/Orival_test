@@ -1,8 +1,9 @@
-import { categories } from "../data";
+import { useApi } from "../context/ApiContext";
 import { CategoryCard } from "../components/category/CategoryCard";
 import { MobileHeader } from "../components/layout/MobileHeader";
 
 export default function Categories() {
+  const { categories } = useApi()
   return (
     <div>
       <MobileHeader title="Categories" />

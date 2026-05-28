@@ -46,7 +46,7 @@ export default function Profile() {
           </p>
           <div className="mt-3 flex justify-between text-xs text-ink-muted">
             <span>Location: {user?.location}</span>
-            <span>Joined {user?.joined}</span>
+            <span>Joined {user?.joinedAt}</span>
           </div>
         </div>
 

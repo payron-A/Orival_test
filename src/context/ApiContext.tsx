@@ -1,5 +1,8 @@
-import { createContext,useContext, useEffect, useState, type ReactNode } from "react";
+import React, { createContext,useContext, useEffect, useState, type ReactNode } from "react";
 import type { Course } from "../types/courses";
+// import { getCourseById } from "../data";
+import type { Provider } from "../types/provider";
+import type { Category } from "../types/category";
 import type{ Enrollment, EnrollmentStatus,  User} from "../types/user";
 import { api } from "../lib/api";
 import { getToken } from "../lib/api";
@@ -8,7 +11,11 @@ type ApiState = {
     courses : Course[],
     setCourses : React.Dispatch<React.SetStateAction<Course[]>>,
     savedCourseIds: string[],
-    enrollments: Record<string, Enrollment>,
+    providers: Provider[],
+    setProviders: React.Dispatch<React.SetStateAction<Provider[]>>,
+    categories: Category[],
+    setCategories: React.Dispatch<React.SetStateAction<Category[]>>,
+    enrollments: Enrollment | {},
     toggleSaveCourse: (courseId: string) => void,
     enroll: (courseId: string) => void,
     setLessonComplete: (courseId: string, lessonId: string, totalLessons: number) => void,
@@ -22,29 +29,14 @@ export function ApiProvider({children}:{children:ReactNode}){
 
 //===== Courses =====:
   const [courses, setCourses] = useState<Course[]>([]);
-// convert courses to be valid to read and show in the map:
-  function mapCourse(c: any): Course {
-      return {
-        ...c,
-        location: c.lat != null
-          ? { lat: c.lat, lng: c.lng, address: c.address ?? "", city: c.city ?? "", country: "Algeria" }
-          : undefined,
-        level: String(c.level).toLowerCase() as Course["level"],
-        lessonCount: 0, outcomes: [], sections: [], reviews: [], tags: [],
-        addedAt: c.createdAt ?? "",
-      };
-  }  
 // get courses from the server
   useEffect(() => {
-    api<{ courses: any[] }>("/courses")
-      .then((r) => setCourses(r.courses.map(mapCourse)))
-      .catch(console.error);
+  api<{ courses: Course[] }>("/courses")
+    .then((r) => setCourses(r.courses))
+    .catch(console.error);
   }, []);
-
 //____Saved Courses:
-  const [savedCourseIds, setSavedCourseIds] = useState<string[]>(
-    load("save_courses",[])
-  );
+  const [savedCourseIds, setSavedCourseIds] = useState<string[]>([]);
   const toggleSaveCourse = async (courseId: string) => {
     const isSaved = savedCourseIds.includes(courseId);
     await api(`/saved/${courseId}`, { method: isSaved ? "DELETE" : "POST" });
@@ -52,11 +44,20 @@ export function ApiProvider({children}:{children:ReactNode}){
       isSaved ? prev.filter((id) => id !== courseId) : [...prev, courseId]
     );
   };
+  useEffect(()=>{
+    api<{savedCourseIds:string[]}>("/saved")
+    .then((r) => setSavedCourseIds(r.savedCourseIds))
+  },[])
+//===== Providers & Category =====
+const [providers, setProviders] = useState<Provider[]>([]);
+const [categories, setCategories] = useState<Category[]>([]);
 
+useEffect(() => {
+  api<{ providers: Provider[] }>("/providers").then((r) => setProviders(r.providers));
+  api<{ categories: Category[] }>("/categories").then((r) => setCategories(r.categories));
+}, []);
 //===== Enrollments =====:
-  const [enrollments, setEnrollments] = useState<Record<string, Enrollment>>(
-    load("enrollments",{})
-  );
+  const [enrollments, setEnrollments] = useState<Enrollment | {}>({});
   const enroll = async (courseId: string) => {
     await api(`/enrollments/${courseId}`, { method: "POST" });
     setEnrollments((prev) => ({
@@ -79,18 +80,18 @@ export function ApiProvider({children}:{children:ReactNode}){
       };
     }
   );
+  useEffect(()=>{
+    api<{enrollments:Enrollment}>("/enrollments")
+    .then((r) => setEnrollments(r.enrollments))
+  },[])
 //===== User =====:
   const [user,setUser] = useState<User | null>(
-    load("user",null)
+    localLoad("user",null)
   )
 
-
-
   useEffect(()=>{
-    save("save_courses",savedCourseIds);
-    save("enrollments",enrollments);
-    save("user",user)
-  },[courses,savedCourseIds,enrollments,user])
+    localSave("user",user)
+  },[user])
   useEffect(() => {
     if (!getToken()) return;
     api<{ savedCourseIds: string[] }>("/saved").then((r) => setSavedCourseIds(r.savedCourseIds));
@@ -98,10 +99,15 @@ export function ApiProvider({children}:{children:ReactNode}){
       setEnrollments(Object.fromEntries(r.enrollments.map((e) => [e.courseId, e])))
     );
   }, [user]);
+  
   const value:ApiState = {
     courses,
     setCourses,
     savedCourseIds,
+    providers,
+    setProviders,
+    categories,
+    setCategories,
     enrollments,
     toggleSaveCourse,
     enroll,
@@ -123,7 +129,7 @@ export function useApi(){
 }
 
 //===== Save & Load Functions =====
-function save(key:string,value:unknown[] | Record<string, Enrollment> | User | null){
+function localSave(key:string,value:unknown[] | Record<string, Enrollment> | User | null){
   try{
     localStorage.setItem(key,JSON.stringify(value))
   }catch(err:unknown){
@@ -132,7 +138,7 @@ function save(key:string,value:unknown[] | Record<string, Enrollment> | User | n
     }
   }
 }
-function load(key:string,seedData:unknown[] | Record<string, Enrollment> | User | null){
+function localLoad(key:string,seedData:unknown[] | Record<string, Enrollment> | User | null){
   try{
     const saved = localStorage.getItem(key);
     if(saved) return JSON.parse(saved);

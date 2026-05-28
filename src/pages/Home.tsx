@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { providers } from "../data";
 import { CourseCard } from "../components/course/CourseCard";
 import { FilterChip } from "../components/ui/FilterChip";
 import { SearchBar } from "../components/ui/SearchBar";
@@ -9,7 +8,6 @@ import { MapPreviewCard } from "../components/map/MapPreviewCard";
 import { MobileHeader } from "../components/layout/MobileHeader";
 import { useApi } from "../context/ApiContext";
 
-
 // _____ Const Types of Filters:
 const filters = ["All", "Near Me", "In-Person", "Online", "Hybrid"] as const;
 
@@ -17,7 +15,7 @@ const filters = ["All", "Near Me", "In-Person", "Online", "Hybrid"] as const;
 export default function Home() {
 
   const navigate = useNavigate();
-  const {courses,user} = useApi();
+  const {courses,providers,user} = useApi();
 
 // _____ FILTER _____
 // _____ Active filter Type:

@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import { categories, providers } from "../data";
 import { CourseCard } from "../components/course/CourseCard";
 import { CategoryCard } from "../components/category/CategoryCard";
 import { MobileHeader } from "../components/layout/MobileHeader";
@@ -32,7 +31,7 @@ function Row({ title, list, onViewAll }: { title: string; list: Course[]; onView
 }
 
 export default function Explore() {
-  const { courses } = useApi();
+  const { courses,providers,categories } = useApi();
   const navigate = useNavigate();
   const popular = [...courses].sort((a, b) => b.studentCount - a.studentCount).slice(0, 8);
   const highlyRated = [...courses].sort((a, b) => b.rating - a.rating).slice(0, 8);

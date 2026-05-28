@@ -44,11 +44,11 @@ export default function CourseDetails() {
       />
 
       <div className="lg:hidden">
-        <img src={course.thumbnailUrl} className="w-full object-cover aspect-video" alt="" />
+        <img src={course.thumbnailUrl} className="w-full object-cover aspect-video" alt=""/>
       </div>
 
       <div className="px-4 lg:px-8 pt-5 lg:pt-7 pb-24 lg:pb-10">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_0.5fr] gap-8">
           <div className="n">
             <div className="hidden lg:block mb-5">
               <button onClick={() => navigate(-1)} className="text-xs text-ink-muted hover:text-ink-secondary">
@@ -246,7 +246,7 @@ export default function CourseDetails() {
                   <img src={provider.avatarUrl} className="h-9 w-9 rounded-full object-cover" alt="" />
                   <div className="min-w-0">
                     <p className="text-xs font-semibold text-ink-primary line-clamp-1">{provider.name}</p>
-                    <p className="text-[11px] text-orival">View provider profile</p>
+                    <p className="text-[11px] text-orival">View profile</p>
                   </div>
                 </Link>
               )}

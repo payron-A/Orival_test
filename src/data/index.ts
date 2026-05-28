@@ -1,10 +1,6 @@
-export { categories } from "./categories";
-export { providers } from "./providers";
 export { defaultCourses } from "./courses";
 export { notifications, historyEntries } from "./notifications";
 
-import { categories } from "./categories";
-import { providers } from "./providers";
 import { useApi } from "../context/ApiContext";
 import type { Course } from "../types/courses";
 import type { Category } from "../types/category";
@@ -17,9 +13,11 @@ export function getCourseById(id: string): Course | undefined {
   return Courses().find((c) => c.id === id);
 }
 export function getProviderById(id: string | undefined): Provider | undefined {
+  const { providers } = useApi();
   return providers.find((p) => p.id === id);
 }
 export function getCategoryById(id: string): Category | undefined {
+  const { categories } = useApi();
   return categories.find((c) => c.id === id);
 }
 export function getCoursesByProvider(providerId: string | undefined): Course[] {

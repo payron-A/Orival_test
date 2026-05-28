@@ -47,11 +47,12 @@ export function Topbar() {
         <button
             onClick={() => user? navigate("/profile") : navigate("/login")}
             className="flex items-center gap-2 rounded-full border border-base-border bg-base-panel py-1 pl-1 pr-2.5 hover:border-base-border2 transition-colors">
-          <img src={user?user.avatarUrl : "/orival.png"} alt="" className="h-7 w-7 rounded-full object-cover" />
-          <span className="text-sm font-medium text-ink-primary">{user?user.name : "P-1"}</span>
+          <img src={user?
+            user.avatarUrl || "https://ui-avatars.com/api/?name=" + encodeURIComponent(user?.name)
+            : "/orival.png"} alt="" className="h-7 w-7 rounded-full object-cover" />
+          <span className="text-sm font-medium text-ink-primary">{user?user.name : "Log In"}</span>
         </button>
       </div>
-
     </header>
   );
 }
