@@ -1,92 +1,34 @@
 import { useState } from "react";
 import { notifications } from "../data";
-import { MobileHeader } from "../components/layout/MobileHeader";
-import { useApp } from "../context/AppContext";
-import type { NotificationCategory } from "../types/category";
+import { useApp } from "../context/app-context";
+import { useI18n } from "../i18n/i18n-context";
+import { PageHead, Empty } from "../components/common/PageHead";
 
-const catColor: Record<NotificationCategory, string> = {
-  update: "#3E8FFF",
-  offer: "#FF7A26",
-  system: "#9B7BFF",
-  reminder: "#33C46A",
-};
-
-const tabs: { key: "all" | NotificationCategory; label: string }[] = [
-  { key: "all", label: "All" },
-  { key: "update", label: "Updates" },
-  { key: "offer", label: "Offers" },
-  { key: "system", label: "System" },
-];
+type Tab = "all" | "update" | "system";
 
 export default function Notifications() {
-  const { notificationsRead, markNotificationRead, markAllNotificationsRead } = useApp();
-  const [tab, setTab] = useState<"all" | NotificationCategory>("all");
-
-  const filtered = notifications.filter((n) => tab === "all" || n.category === tab);
-  const today = filtered.filter((n) => n.timeAgo.includes("h ago"));
-  const earlier = filtered.filter((n) => !n.timeAgo.includes("h ago"));
-
+  const { notificationsRead, markRead, markAllRead } = useApp();
+  const { t } = useI18n();
+  const [tab, setTab] = useState<Tab>("all");
+  const list = notifications.filter((n) => tab === "all" || n.category === tab);
   return (
-    <div>
-      <MobileHeader title="Notifications" />
-      <div className="px-4 lg:px-8 pt-5 lg:pt-7 pb-6">
-        <div className="flex items-center justify-between mb-4">
-          <h1 className="hidden lg:block font-display text-2xl font-bold text-ink-primary">Notifications</h1>
-          <button onClick={markAllNotificationsRead} className="ml-auto text-xs font-medium text-orival hover:text-orival-bright">
-            Mark all as read
-          </button>
-        </div>
-
-        <div className="flex gap-2 mb-5 overflow-x-auto no-scrollbar">
-          {tabs.map((t) => (
-            <button
-              key={t.key}
-              onClick={() => setTab(t.key)}
-              className={`shrink-0 rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors ${
-                tab === t.key ? "bg-orival border-orival text-black" : "bg-base-panel border-base-border text-ink-secondary hover:text-ink-primary"
-              }`}
-            >
-              {t.label}
-            </button>
-          ))}
-        </div>
-
-        {today.length > 0 && <Group title="Today" items={today} />}
-        {earlier.length > 0 && <Group title="Earlier" items={earlier} />}
-        {filtered.length === 0 && <p className="text-sm text-ink-muted py-10 text-center">Nothing here.</p>}
+    <div className="container page" style={{ maxWidth: 760 }}>
+      <PageHead eyebrow={t("nav.notifications")} title={t("notif.title")} lede={t("notif.sampleNote")}
+        actions={<button className="btn btn--sm" onClick={markAllRead}>{t("notif.markAll")}</button>} />
+      <div className="tabs" role="tablist" style={{ marginBlockEnd: 16 }}>
+        {(["all", "update", "system"] as Tab[]).map((k) => <button key={k} role="tab" aria-selected={tab === k} onClick={() => setTab(k)}>{t(`notif.tab.${k}`)}</button>)}
       </div>
+      {list.length === 0 ? <Empty title={t("notif.empty")} /> : (
+        <ul>
+          {list.map((n) => (
+            <li key={n.id} className="list-row" style={{ gridTemplateColumns: "12px 1fr auto" }}>
+              <span aria-hidden="true" style={{ width: 8, height: 8, background: notificationsRead[n.id] ? "transparent" : "var(--orange-500)", borderRadius: "50%" }} />
+              <div><h3 style={{ fontSize: "1rem" }}>{n.title}</h3><p className="muted" lang="en" dir="ltr" style={{ textAlign: "start" }}>{n.body}</p></div>
+              {!notificationsRead[n.id] && <button className="btn btn--sm btn--ghost" onClick={() => markRead(n.id)}>✓</button>}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
-
-  function Group({ title, items }: { title: string; items: typeof notifications }) {
-    return (
-      <div className="mb-6">
-        <h2 className="text-xs font-semibold text-ink-muted mb-2.5">{title}</h2>
-        <div className="flex flex-col gap-2">
-          {items.map((n) => {
-            const read = notificationsRead[n.id];
-            return (
-              <button
-                key={n.id}
-                onClick={() => markNotificationRead(n.id)}
-                className={`flex items-start gap-3 rounded-xl2 border p-3.5 text-left transition-colors ${
-                  read ? "border-base-border bg-base-panel" : "border-orival/30 bg-orival/[0.04]"
-                }`}
-              >
-                <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full" style={{ backgroundColor: `${catColor[n.category]}1F`, color: catColor[n.category] }}>
-                  <i className="fa-solid fa-home"></i>
-                </span>
-                <div className="min-w-0 flex-1">
-                  <p className="text-sm font-semibold text-ink-primary">{n.title}</p>
-                  <p className="mt-0.5 text-xs text-ink-secondary leading-relaxed">{n.body}</p>
-                  <p className="mt-1 text-[11px] text-ink-muted">{n.timeAgo}</p>
-                </div>
-                {!read && <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-orival" />}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-    );
-  }
 }

@@ -54,7 +54,7 @@ const practicalReviews = reviews(
 );
 
 // ____ Sections___________
-function sections(groups: { title: string; lessons: { title: string; duration: string; completed?: boolean; locked?: boolean }[] }[], prefix: string): CourseSection[] {
+function sections(groups: { title: string; lessons: { title: string; duration: string;  }[] }[], prefix: string): CourseSection[] {
   return groups.map((g, gi) => ({
     id: `${prefix}s${gi + 1}`,
     title: g.title,
@@ -69,8 +69,8 @@ const photoSections = sections(
     { 
       title: "Photography Basics", 
       lessons: [
-        { title: "Understanding your camera", duration: "12:30", completed: true },
-        { title: "Your camera settings", duration: "09:15", completed: true },
+        { title: "Understanding your camera", duration: "12:30" },
+        { title: "Your camera settings", duration: "09:15" },
         { title: "Exposure Triangle", duration: "15:45" },
       ] 
     },
@@ -84,8 +84,8 @@ const photoSections = sections(
     { 
       title: "Lighting", 
       lessons: [
-        { title: "Natural light", duration: "11:40", locked: true },
-        { title: "Studio lighting basics", duration: "13:05", locked: true },
+        { title: "Natural light", duration: "11:40" },
+        { title: "Studio lighting basics", duration: "13:05" },
       ] 
     },
   ],
@@ -95,8 +95,8 @@ const photoSections = sections(
 const photoEditSections = sections(
   [
     { title: "Editing Workflow", lessons: [
-      { title: "Culling your shoot", duration: "10:10", completed: true },
-      { title: "Setting up your catalog", duration: "08:30", completed: true },
+      { title: "Culling your shoot", duration: "10:10" },
+      { title: "Setting up your catalog", duration: "08:30" },
       { title: "Non-destructive editing basics", duration: "12:15" },
     ] },
     { title: "Color & Light", lessons: [
@@ -104,8 +104,8 @@ const photoEditSections = sections(
       { title: "Building a consistent look", duration: "09:45" },
     ] },
     { title: "Finishing", lessons: [
-      { title: "Building presets", duration: "11:20", locked: true },
-      { title: "Batch exporting", duration: "07:10", locked: true },
+      { title: "Building presets", duration: "11:20" },
+      { title: "Batch exporting", duration: "07:10" },
     ] },
   ],
   "edit-"
@@ -115,8 +115,8 @@ function makeProgrammingSections(topic: string) {
   return sections(
     [
       { title: "Foundations", lessons: [
-        { title: "Setting up your environment", duration: "11:00", completed: true },
-        { title: `Core ${topic} syntax`, duration: "16:20", completed: true },
+        { title: "Setting up your environment", duration: "11:00" },
+        { title: `Core ${topic} syntax`, duration: "16:20" },
         { title: "Variables & data types", duration: "13:40" },
       ] },
       { title: "Building Projects", lessons: [
@@ -124,8 +124,8 @@ function makeProgrammingSections(topic: string) {
         { title: "Debugging basics", duration: "09:30" },
       ] },
       { title: "Going Further", lessons: [
-        { title: "Working with APIs", duration: "18:15", locked: true },
-        { title: "Deploying your project", duration: "12:45", locked: true },
+        { title: "Working with APIs", duration: "18:15" },
+        { title: "Deploying your project", duration: "12:45" },
       ] },
     ],
     `prog-${topic}-`
@@ -135,8 +135,8 @@ function makeProgrammingSections(topic: string) {
 const designSections = sections(
   [
     { title: "Design Foundations", lessons: [
-      { title: "Core design principles", duration: "13:00", completed: true },
-      { title: "Color & typography", duration: "15:30", completed: true },
+      { title: "Core design principles", duration: "13:00" },
+      { title: "Color & typography", duration: "15:30" },
       { title: "Tools overview", duration: "10:20" },
     ] },
     { title: "Practical Design", lessons: [
@@ -144,8 +144,8 @@ const designSections = sections(
       { title: "Prototyping basics", duration: "14:10" },
     ] },
     { title: "Refinement", lessons: [
-      { title: "Getting feedback", duration: "08:50", locked: true },
-      { title: "Presenting your work", duration: "09:15", locked: true },
+      { title: "Getting feedback", duration: "08:50" },
+      { title: "Presenting your work", duration: "09:15" },
     ] },
   ],
   "design-"
@@ -154,8 +154,8 @@ const designSections = sections(
 const businessSections = sections(
   [
     { title: "Fundamentals", lessons: [
-      { title: "Core concepts", duration: "12:00", completed: true },
-      { title: "Understanding your market", duration: "14:20", completed: true },
+      { title: "Core concepts", duration: "12:00" },
+      { title: "Understanding your market", duration: "14:20" },
       { title: "Setting goals", duration: "07:40" },
     ] },
     { title: "Strategy", lessons: [
@@ -163,8 +163,8 @@ const businessSections = sections(
       { title: "Execution basics", duration: "11:35" },
     ] },
     { title: "Measuring Results", lessons: [
-      { title: "Tracking key metrics", duration: "09:50", locked: true },
-      { title: "Reporting & iteration", duration: "10:05", locked: true },
+      { title: "Tracking key metrics", duration: "09:50" },
+      { title: "Reporting & iteration", duration: "10:05" },
     ] },
   ],
   "biz-"
@@ -173,8 +173,8 @@ const businessSections = sections(
 const languageSections = sections(
   [
     { title: "Getting Started", lessons: [
-      { title: "Everyday phrases", duration: "09:00", completed: true },
-      { title: "Pronunciation basics", duration: "11:20", completed: true },
+      { title: "Everyday phrases", duration: "09:00" },
+      { title: "Pronunciation basics", duration: "11:20" },
       { title: "Common expressions", duration: "08:45" },
     ] },
     { title: "Building Fluency", lessons: [
@@ -182,8 +182,8 @@ const languageSections = sections(
       { title: "Listening practice", duration: "15:00" },
     ] },
     { title: "Real Conversations", lessons: [
-      { title: "Guided speaking practice", duration: "20:00", locked: true },
-      { title: "Cultural context", duration: "10:15", locked: true },
+      { title: "Guided speaking practice", duration: "20:00" },
+      { title: "Cultural context", duration: "10:15" },
     ] },
   ],
   "lang-"
@@ -192,8 +192,8 @@ const languageSections = sections(
 const musicSections = sections(
   [
     { title: "Getting Started", lessons: [
-      { title: "Holding your instrument", duration: "07:20", completed: true },
-      { title: "Your first chords", duration: "12:40", completed: true },
+      { title: "Holding your instrument", duration: "07:20" },
+      { title: "Your first chords", duration: "12:40" },
       { title: "Basic strumming patterns", duration: "09:10" },
     ] },
     { title: "Building Skills", lessons: [
@@ -201,8 +201,8 @@ const musicSections = sections(
       { title: "Chord transitions", duration: "10:30" },
     ] },
     { title: "Playing Songs", lessons: [
-      { title: "Your first song", duration: "14:20", locked: true },
-      { title: "Practice routine", duration: "06:45", locked: true },
+      { title: "Your first song", duration: "14:20" },
+      { title: "Practice routine", duration: "06:45" },
     ] },
   ],
   "music-"
@@ -211,16 +211,16 @@ const musicSections = sections(
 const drivingSections = sections(
   [
     { title: "Road Fundamentals", lessons: [
-      { title: "Road rules & signage", duration: "10:00", completed: true },
-      { title: "Vehicle controls", duration: "08:30", completed: true },
+      { title: "Road rules & signage", duration: "10:00" },
+      { title: "Vehicle controls", duration: "08:30" },
     ] },
     { title: "Hands-on Practice", lessons: [
       { title: "Guided practice session 1", duration: "45:00" },
       { title: "Parking maneuvers", duration: "30:00" },
     ] },
     { title: "Confidence Building", lessons: [
-      { title: "Highway driving", duration: "40:00", locked: true },
-      { title: "Final assessment", duration: "35:00", locked: true },
+      { title: "Highway driving", duration: "40:00" },
+      { title: "Final assessment", duration: "35:00" },
     ] },
   ],
   "drive-"
@@ -229,16 +229,16 @@ const drivingSections = sections(
 const cookingSections = sections(
   [
     { title: "Kitchen Fundamentals", lessons: [
-      { title: "Knife skills", duration: "14:00", completed: true },
-      { title: "Setting up your station", duration: "07:15", completed: true },
+      { title: "Knife skills", duration: "14:00" },
+      { title: "Setting up your station", duration: "07:15" },
     ] },
     { title: "Core Techniques", lessons: [
       { title: "Sauces & stocks", duration: "18:20" },
       { title: "Meal planning", duration: "09:40" },
     ] },
     { title: "Bringing It Together", lessons: [
-      { title: "Baking basics", duration: "16:10", locked: true },
-      { title: "Plating & presentation", duration: "08:00", locked: true },
+      { title: "Baking basics", duration: "16:10" },
+      { title: "Plating & presentation", duration: "08:00" },
     ] },
   ],
   "cook-"
@@ -295,7 +295,7 @@ export const defaultCourses: Course[] = [
   {
     id: "photography-basics",
     title: "Photography Basics",
-    thumbnailUrl: "/https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=200&h=200&fit=crop",
+    thumbnailUrl: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=200&h=200&fit=crop",
     providerId: "photo-center",
     categoryId: "photography",
     mode: "online",

@@ -1,88 +1,44 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useMemo } from "react";
-import { MobileHeader } from "../components/layout/MobileHeader";
-import { useApi } from "../context/ApiContext";
-
-const menu = [
-  { to: "/dashboard", label: "Dashboard", icon:"fa-solid fa-chart-column"},
-  { to: "/enrollments", label: "My Enrollments", icon:"fa-solid fa-circle-dot"},
-  { to: "/saved", label: "Saved", icon:"fa-solid fa-bookmark" },
-  { to: "/history", label: "History", icon:"fa-solid fa-history"},
-  { to: "/notifications", label: "Notifications" ,icon:"fa-solid fa-bell"},
-  { to: "/settings", label: "Settings",icon:"fa-solid fa-gear"},
-];
+import { Link, Navigate } from "react-router-dom";
+import { useApi } from "../context/api-context";
+import { useI18n } from "../i18n/i18n-context";
 
 export default function Profile() {
-  const navigate = useNavigate();
-  const { enrollments, user , setUser } = useApi();
-  const selectionList = useMemo(()=>
-    user?.providerId? menu : menu.filter(m => m.label !== "Dashboard"),[user]
-  );
-  const list = Object.values(enrollments);
-  const completed = list.filter((e) => e.status === "completed").length;
-
+  const { user, isCreator, signOut } = useApi();
+  const { t, date } = useI18n();
+  if (!user) return <Navigate to="/signin?next=%2Fprofile" replace />;
+  const links = [
+    { to: "/dashboard", label: t("profile.menu.dashboard"), icon: "fa-table-columns" },
+    { to: "/library", label: t("profile.menu.library"), icon: "fa-bookmark" },
+    { to: "/notifications", label: t("profile.menu.notifications"), icon: "fa-bell" },
+    { to: "/settings", label: t("profile.menu.settings"), icon: "fa-gear" },
+  ];
   return (
-    <div>
-      <MobileHeader title="Profile" />
-      <div className="px-4 lg:px-8 pt-5 lg:pt-7 pb-8">
-        <div className="flex flex-col items-center text-center gap-2 lg:flex-row lg:text-left lg:items-center lg:gap-4">
-          <img src={user?.avatarUrl} className="h-20 w-20 rounded-full object-cover" alt="" />
-          <div>
-            <h1 className="font-display text-xl font-bold text-ink-primary">{user?.name}</h1>
-            <p className="text-sm text-ink-muted">{user?.handle}</p>
-          </div>
+    <div className="container page" style={{ maxWidth: 720 }}>
+      <header className="row" style={{ gap: 24, marginBlockEnd: 32 }}>
+        <img className="avatar" src={user.avatarUrl} alt="" width={72} height={72} />
+        <div className="stack">
+          <span className="eyebrow">{t("profile.title")}</span>
+          <h1 style={{ fontSize: "var(--fs-xl)" }}>{user.name}</h1>
+          <p className="muted">{user.handle}{user.joinedAt ? ` · ${t("profile.joined", { date: date(user.joinedAt) })}` : ""}</p>
         </div>
-
-        <div className="mt-5 grid grid-cols-3 gap-3 max-w-md mx-auto lg:mx-0">
-          <Stat label="Enrollments" value={list.length} />
-          <Stat label="Completed" value={completed} />
-          <Stat label="Certificates" value={completed} />
-        </div>
-
-        <div className="mt-6 max-w-md mx-auto lg:mx-0 rounded-xl2 border border-base-border bg-base-panel p-4">
-          <h2 className="text-sm font-semibold text-ink-primary mb-1.5">About me</h2>
-          <p className="text-sm text-ink-secondary leading-relaxed">
-            Passionate about learning new skills and sharing knowledge.
-          </p>
-          <div className="mt-3 flex justify-between text-xs text-ink-muted">
-            <span>Location: {user?.location}</span>
-            <span>Joined {user?.joined}</span>
-          </div>
-        </div>
-
-        <div className="mt-6 flex flex-col gap-1 max-w-md mx-auto lg:mx-0">
-          {selectionList.map(({ to, label,icon}) => (
-            <Link
-              key={label}
-              to={to}
-              className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-ink-secondary hover:bg-base-panel2 hover:text-ink-primary transition-colors"
-            >
-              <i className={icon}></i>
-              <span className="flex-1">{label}</span>
-              <i className="fa-solid fa-chevron-right"></i>
+      </header>
+      <dl className="facts" style={{ marginBlockEnd: 32 }}>
+        <dl>
+          <div><dt>{t("profile.account")}</dt><dd>{isCreator ? t("profile.role.creator") : t("profile.role.member")}</dd></div>
+          <div><dt>{t("settings.email")}</dt><dd dir="ltr" style={{ textAlign: "start" }}>{user.email}</dd></div>
+          {user.location && <div><dt>{t("settings.location")}</dt><dd>{user.location}</dd></div>}
+        </dl>
+      </dl>
+      <ul>
+        {links.map((l) => (
+          <li key={l.to}>
+            <Link className="list-row" style={{ gridTemplateColumns: "24px 1fr auto" }} to={l.to}>
+              <i className={`fa-regular ${l.icon}`} aria-hidden="true" /><span>{l.label}</span><i className="fa-solid fa-chevron-right i-dir" aria-hidden="true" />
             </Link>
-          ))}
-          <button
-            onClick={() =>{ 
-              setUser(null);
-              navigate("/")
-            }}
-            className="mt-2 flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-semibold text-red-400 hover:bg-red-400/5 transition-colors"
-          >
-            <i className="fa-solid fa-right-from-bracket"></i>
-            Log Out
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function Stat({ label, value }: { label: string; value: number }) {
-  return (
-    <div className="flex flex-col items-center gap-0.5 rounded-xl2 border border-base-border bg-base-panel py-3">
-      <span className="font-display text-lg font-bold text-ink-primary">{value}</span>
-      <span className="text-[11px] text-ink-muted">{label}</span>
+          </li>
+        ))}
+      </ul>
+      <button className="btn btn--danger" style={{ marginBlockStart: 32 }} onClick={signOut}>{t("nav.signOut")}</button>
     </div>
   );
 }

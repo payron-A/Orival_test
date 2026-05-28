@@ -8,7 +8,7 @@ export interface Category {
   color: string;
 }
 //___Notification Category:
-export type NotificationCategory = "update" | "offer" | "system" | "reminder";
+export type NotificationCategory = "update" | "system";
 export interface AppNotification {
   id: string;
   category: NotificationCategory;

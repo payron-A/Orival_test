@@ -1,22 +1,22 @@
 //_____COURSES_____
-//___Courses Modes:
 export type LearningMode = "in-person" | "online" | "hybrid";
 export type CourseLevel = "beginner" | "intermediate" | "advanced" | "all levels";
-//___Courses Section:
+export type PublishStatus = "draft" | "published";
+
+export interface Lesson {
+  id: string;
+  title: string;
+  duration: string; // "12:30"
+  /** Direct media URL (mp4/webm/…). Absent = no playable source attached. */
+  videoUrl?: string;
+  /** Optional WebVTT URL. Only rendered when provided. */
+  captionsUrl?: string;
+}
 export interface CourseSection {
   id: string;
   title: string;
   lessons: Lesson[];
 }
-//___Courses Lesson:
-export interface Lesson {
-  id: string;
-  title: string;
-  duration: string; // "12:30"
-  completed?: boolean;
-  locked?: boolean;
-}
-//___Courses Location:
 export interface GeoLocation {
   lat: number;
   lng: number;
@@ -24,7 +24,6 @@ export interface GeoLocation {
   city: string;
   country: string;
 }
-//___Courses Review:
 export interface Review {
   id: string;
   authorName: string;
@@ -33,27 +32,28 @@ export interface Review {
   date: string;
   comment: string;
 }
-//___Courses:
 export interface Course {
   id: string;
   title: string;
   thumbnailUrl: string;
-  providerId: string;
+  providerId: string; // shown in the UI as the "Creator"
   categoryId: string;
   mode: LearningMode;
   rating: number;
   reviewCount: number;
-  studentCount: number;
-  priceDzd: number;
   level: CourseLevel;
   lessonCount: number;
   durationLabel: string; // "6h 30m"
-  distanceKm?: number; // only when in-person/hybrid and near user
-  location?: GeoLocation; // only when in-person/hybrid
+  distanceKm?: number;
+  location?: GeoLocation;
   description: string;
   outcomes: string[];
   sections: CourseSection[];
   reviews: Review[];
   tags: string[];
-  addedAt: string; // ISO date, for "recently added"
+  addedAt: string; // ISO date
+  status?: PublishStatus; // undefined = published (backend / seed content)
+  /** Legacy marketplace fields still sent by the API; never displayed. */
+  studentCount?: number;
+  priceDzd?: number;
 }
