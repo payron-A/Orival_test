@@ -1,5 +1,14 @@
-import { useMemo, useState } from "react";
-import { projectPoints } from "./mapProjection";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+import {
+  MapContainer,
+  Marker,
+  Popup,
+  TileLayer,
+  useMap,
+} from "react-leaflet";
+import type { Map as LeafletMap } from "leaflet";
+import { useEffect} from "react";
 
 export interface MapMarkerData {
   id: string;
@@ -9,95 +18,132 @@ export interface MapMarkerData {
   emphasized?: boolean;
 }
 
-export function MapView({
-  markers,
-  selectedId,
-  onSelect,
-  className = "",
-  userMarker = true,
-}: {
+interface MapViewProps {
   markers: MapMarkerData[];
   selectedId?: string | null;
   onSelect?: (id: string) => void;
   className?: string;
   userMarker?: boolean;
-}) {
-  const [zoom, setZoom] = useState(1);
-  const projected = useMemo(() => projectPoints(markers), [markers]);
-  const center = projected.length? 
-    { x: projected.reduce((s, p) => s + p.x, 0) / projected.length, y: projected.reduce((s, p) => s + p.y, 0) / projected.length }
-    : { x: 50, y: 50 };
+}
 
+/* --------------------------------------------------
+   Algeria map settings
+-------------------------------------------------- */
+
+const ALGERIA_CENTER: [number, number] = [28.0339, 1.6596];
+
+const ALGERIA_BOUNDS: L.LatLngBoundsExpression = [
+  [18.9, -8.7], // South-West
+  [37.1, 12.0], // North-East
+];
+
+/* --------------------------------------------------
+   Custom Orival marker
+-------------------------------------------------- */
+
+const createMarkerIcon = (active: boolean) =>
+  L.divIcon({
+    className: "",
+    html: `
+        <i
+          class="fa-solid fa-location-pin ${active ? "animate-jump" : ""}"
+          style="
+            color: ${active ? "#f97316" : "#111827"};
+            filter: ${
+              active
+                ? "drop-shadow(0 3px 5px #f97316)"
+                : "drop-shadow(0 2px 3px rgba(0,0,0,0.25))"
+            };
+          "
+        ></i>
+    `,
+    iconSize: [0, 0],
+    iconAnchor: [0, 0],
+  });
+
+/* --------------------------------------------------
+   Keep selected course visible
+-------------------------------------------------- */
+
+function SelectedMarkerController({
+  markers,
+  selectedId,
+}: {
+  markers: MapMarkerData[];
+  selectedId?: string | null;
+}) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!selectedId) return;
+
+    const selectedMarker = markers.find(
+      (marker) => marker.id === selectedId
+    );
+
+    if (!selectedMarker) return;
+
+    map.panTo([selectedMarker.lat, selectedMarker.lng]);
+  }, [selectedId, markers, map]);
+
+  return null;
+}
+
+/* --------------------------------------------------
+   MapView
+-------------------------------------------------- */
+
+export function MapView({
+  markers,
+  selectedId,
+  onSelect,
+  className = "",
+}: MapViewProps) {
   return (
-    // MAP:
-    <div  className={`relative overflow-hidden rounded-xl2 border border-base-border select-none ${className}`}
-          style={{background:"radial-gradient(circle at 30% 20%, #191c22 0%, #101216 55%, #0c0d10 100%)",}}>
-      {/* ROAD GRID */}
-      <svg className="absolute inset-0 h-full w-full opacity-40" preserveAspectRatio="none">
-        <defs>
-          <pattern id="grid" width="42" height="42" patternUnits="userSpaceOnUse">
-            <path d="M 42 0 L 0 0 0 42" fill="none" stroke="#242731" strokeWidth="1" />
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#grid)" />
-        <path d="M 0 65 Q 200 40 420 90 T 900 60" stroke="#2E3239" strokeWidth="3" fill="none" opacity="0.6" />
-        <path d="M 80 0 Q 140 220 60 420" stroke="#2E3239" strokeWidth="3" fill="none" opacity="0.6" />
-        <path d="M 0 220 Q 320 260 640 200 T 1000 240" stroke="#252831" strokeWidth="2" fill="none" opacity="0.5" />
-      </svg>
-      {/* POSITION */}
-      <div  className="absolute inset-0 transition-transform duration-300"
-            style={{ transform: `scale(${zoom})`, transformOrigin: `${center.x}% ${center.y}%` }}>   
-        {/* USER POSITION */}
-        {userMarker && (
-          <div  className="absolute -translate-x-1/2 -translate-y-1/2"
-                style={{ left: `${center.x}%`, top: `${center.y}%` }}>
-            <span className="relative flex h-3.5 w-3.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-mode-online opacity-60" />
-              <span className="relative inline-flex h-3.5 w-3.5 rounded-full bg-mode-online ring-4 ring-mode-online/20" />
-            </span>
-          </div>
-        )}
-        {/* COURSES POSITION */}
-        {projected.map((m) => {
-          const active = selectedId === m.id;
+    <div className={`relative overflow-hidden rounded-2xl ${className}`}>
+      <MapContainer
+        center={ALGERIA_CENTER}
+        zoom={1}
+        minZoom={4.5}
+        maxZoom={18}
+        maxBounds={ALGERIA_BOUNDS}
+        maxBoundsViscosity={1}
+        scrollWheelZoom={true}
+        className="h-full w-full overflow-hidden rounded-lg"
+      >
+        {/* Real OpenStreetMap map */}
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+
+        {/* Move map when selected course changes */}
+        <SelectedMarkerController
+          markers={markers}
+          selectedId={selectedId}
+        />
+
+        {/* Course markers */}
+        {markers.map((marker) => {
+          const active = selectedId === marker.id;
+
           return (
-            <button
-                key={m.id}
-                onClick={() => onSelect?.(m.id)}
-                aria-label={m.label}
-                className="absolute -translate-x-1/2 -translate-y-full transition-transform hover:-translate-y-[105%]"
-                style={{ left: `${m.x}%`, top: `${m.y}%`, zIndex: active ? 20 : 10 }}>
-              <span
-                  className={`flex flex-col items-center drop-shadow-lg ${active ? "scale-110" : ""} transition-transform`}>
-                <i  
-                  className={`fa-solid fa-location-pin ${selectedId == m.id?"animate-jump":""}`}
-                  style={{color:"#FF7A26",textShadow:"0 0 3px #FF7A26,1px 1px 4px #000000"}}></i>
-              </span>
-            </button>
+            <Marker
+              key={marker.id}
+              position={[marker.lat, marker.lng]}
+              icon={createMarkerIcon(active)}
+              eventHandlers={{
+                click: () => {
+                  onSelect?.(marker.id);
+                },
+              }}
+            >
+              {/* <Popup>
+                <strong>{marker.label}</strong>
+              </Popup> */}
+            </Marker>
           );
         })}
-      </div>
-      {/* ACTIONS */}
-      <div className="absolute top-3 right-3 flex flex-col gap-1.5">
-          {/* zoom + */}
-          <button
-              onClick={() => setZoom((z) => Math.min(2, z + 0.2))}
-              className="flex h-8 w-8 items-center justify-center rounded-lg border border-base-border bg-base-panel/90 text-ink-secondary backdrop-blur hover:text-ink-primary">
-            <i className="fa-solid fa-plus"></i>
-          </button>
-          {/* zoom - */}
-          <button
-              onClick={() => setZoom((z) => Math.max(0.7, z - 0.2))}
-              className="flex h-8 w-8 items-center justify-center rounded-lg border border-base-border bg-base-panel/90 text-ink-secondary backdrop-blur hover:text-ink-primary">
-            <i className="fa-solid fa-minus"></i>
-          </button>
-          {/* default */}
-          <button
-              onClick={() => setZoom(1)}
-              className="flex h-8 w-8 items-center justify-center rounded-lg border border-base-border bg-base-panel/90 text-ink-secondary backdrop-blur hover:text-ink-primary">
-            <i className="fa-solid fa-home"></i>
-          </button>
-      </div>
+      </MapContainer>
     </div>
   );
-}
+} 

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { courses, providers, categories } from "../data";
 import type { Course } from "../types";
@@ -25,17 +25,33 @@ export default function SearchResults() {
   const [price,setPrice] = useState<string>("");
   const [rating,setRating] = useState<string>("");
 
+
 // _____ FILTERS _____
+// _____ Filter Button _____
+  const filterListRef = useRef<HTMLElement | null>(null)
+
+// _____ By Tabs _____
   const matchedCourses = useMemo(() => 
-    (q.trim() ? courses.filter((c:Course) =>{ 
-        const matchSearch = (c.title.toLowerCase().includes(q.toLowerCase())|| c.tags.some((t) => t.includes(q.toLowerCase())));
-        const matchFilter = Filter(c)
+      courses.filter((c:Course) =>{ 
+        const matchSearch = q.trim()?
+            (c.title.toLowerCase().includes(q.toLowerCase())|| c.tags.some((t) => t.includes(q.toLowerCase())))
+            :courses;
+        const matchFilter = Filter(c);
         return matchSearch && matchFilter;
     })
-      :courses)
     ,[q,category,level,learningMode,price,rating]
   );
+  const matchedProviders = useMemo(
+    () => (q.trim() ? providers.filter((p) => p.name.toLowerCase().includes(q.toLowerCase())) : providers),
+    [q]
+  );
+  const matchedCategories = useMemo(
+    () => (q.trim() ? categories.filter((c) => c.name.toLowerCase().includes(q.toLowerCase())) : categories),
+    [q]
+  );
+  const total = matchedCourses.length ;
 
+// _____ By Options _____
   function Filter(course:Course){
     const matchCategory = category?course.categoryId === category.toLocaleLowerCase():true;
     const matchLearningMode = learningMode?course.mode === learningMode.toLocaleLowerCase():true;
@@ -69,17 +85,6 @@ export default function SearchResults() {
       }
     }
   }
-  
-  const matchedProviders = useMemo(
-    () => (q.trim() ? providers.filter((p) => p.name.toLowerCase().includes(q.toLowerCase())) : providers),
-    [q]
-  );
-  const matchedCategories = useMemo(
-    () => (q.trim() ? categories.filter((c) => c.name.toLowerCase().includes(q.toLowerCase())) : categories),
-    [q]
-  );
-  const total = matchedCourses.length + matchedProviders.length + matchedCategories.length;
-
 
   const tabs: { key: Tab; label: string; count: number }[] = [
     { key: "all", label: "All", count: total },
@@ -95,9 +100,11 @@ export default function SearchResults() {
       <div className="px-4 lg:px-8 pt-4 lg:pt-7">
         <SearchBar
           value={q}
+          withFilterButton
+          onFilterClick={()=>filterListRef?.current.classList.toggle("hidden")}
           onChange={(v) => setParams(v ? { q: v } : {})}
           placeholder="Search courses, providers, categories..."/>
-        
+
         {q.trim() && (
           <p className="mt-3 text-sm text-ink-secondary">
             {total} results for "<span className="text-ink-primary font-medium">{q}</span>"
@@ -123,7 +130,7 @@ export default function SearchResults() {
                         lg:grid-cols-[220px_1fr] gap-6 mt-5 pb-8`}>
           {/* SIDE FILTERS */}
           {(tab === "all" || tab === "courses")&&
-            <aside className="hidden lg:flex flex-col gap-5">
+            <aside className="lg:flex flex-col gap-5" ref={filterListRef}>
               <FilterGroup title="Category" options={categories.slice(0, 6).map((c) => c.name)} 
                            onChange={setCategory} />
               <FilterGroup title="Learning mode" options={["In-Person", "Online", "Hybrid"]} 
@@ -173,7 +180,9 @@ export default function SearchResults() {
             )}
 
             {total === 0 && (
-              <p className="text-sm text-ink-muted py-10 text-center">No results found for "{q}".</p>
+              <p className="text-sm text-ink-muted py-10 text-center">
+                No results found  {q?`for "${q}"`:""}.
+                </p>
             )}
           </div>
         </div>

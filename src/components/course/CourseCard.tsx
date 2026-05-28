@@ -20,8 +20,10 @@ export function CourseCard({ course, compact }: { course: Course; compact?: bool
           src={course.thumbnailUrl}
           alt={course.title}
           loading="lazy"
-          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-        />
+          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"/>
+        <div className="absolute bottom-2.5 left-2.5">
+          <ModeBadge mode={course.mode} />
+        </div>
         <button
           onClick={(e) => {
             e.preventDefault();
@@ -34,9 +36,6 @@ export function CourseCard({ course, compact }: { course: Course; compact?: bool
         >
           <i style={{fontSize:15}} className={`fa-solid fa-bookmark ${saved ? "fill-black" : ""}`} />
         </button>
-        <div className="absolute bottom-2.5 left-2.5">
-          <ModeBadge mode={course.mode} />
-        </div>
       </div>
 
       <div className={`flex flex-col gap-1.5 p-3.5 ${compact ? "" : ""}`}>

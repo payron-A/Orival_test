@@ -32,7 +32,7 @@ export function ProviderListRow({ provider, meta }: { provider: Provider; meta?:
         </div>
         <span className="text-xs text-ink-muted">{meta ?? `${provider.followerCount.toLocaleString()} followers`}</span>
       </div>
-      <i className="fa-solid fa-arrow-right text-ink-primary"/>
+      <i className="fa-solid fa-chevron-right text-ink-primary"/>
     </Link>
   );
 }

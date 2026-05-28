@@ -4,21 +4,21 @@ import { useApp } from "../../context/AppContext";
 
 const discoverLinks = [
   { to: "/", label: "Home", end: true, icon: "fa-solid fa-home" },
-  { to: "/explore", label: "Explore", icon:"fa-solid fa-search" },
-  { to: "/map", label: "Map", icon:"fa-solid fa-map" },
-  { to: "/categories", label: "Categories", icon:"fa-solid fa-tasks" },
+  { to: "/explore", label: "Explore", icon:"fa-solid fa-compass" },
+  { to: "/map", label: "Map", icon:"fa-solid fa-map-location" },
+  { to: "/categories", label: "Categories", icon:"fa-solid fa-layer-group" },
 ];
 
 const libraryLinks = [
   { to: "/saved", label: "Saved", icon: "fa-solid fa-bookmark" },
   { to: "/history", label: "History", icon: "fa-solid fa-history"},
-  { to: "/my-learning", label: "My Learning", icon: "fa-solid fa-book" },
-  { to: "/enrollments", label: "My Enrollments", icon: "fa-solid fa-circle" },
+  { to: "/my-learning", label: "My Learning", icon: "fa-solid fa-chart-line" },
+  { to: "/enrollments", label: "My Enrollments", icon: "fa-solid fa-circle-dot" },
 ];
 
 const accountLinks = [
   { to: "/profile", label: "Profile", icon: "fa-solid fa-user"},
-  { to: "/settings", label: "Settings", icon: "fa-solid fa-edit" },
+  { to: "/settings", label: "Settings", icon: "fa-solid fa-gear" },
 ];
 
 function NavSection({ title, links }: { title: string; links: typeof discoverLinks }) {
@@ -34,7 +34,7 @@ function NavSection({ title, links }: { title: string; links: typeof discoverLin
                 `flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors 
                 ${isActive? "bg-orival/10 text-orival"
                           : "text-ink-secondary hover:bg-base-panel2 hover:text-ink-primary"}`}>
-            <i className={icon}></i>
+            <i className={(icon)}></i>
             {label}
           </NavLink>
         ))}

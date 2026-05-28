@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { courses, providers } from "../data";
 import { CourseCard } from "../components/course/CourseCard";
@@ -20,7 +20,7 @@ export default function Home() {
   // _____ STATE _____
   // _____ Active filter Type _____
   const [activeFilter, setActiveFilter] = useState<(typeof filters)[number]>("All");
-  const [selectedId, setSelectedId] = useState<string | null>("advanced-photography");
+  const [selectedId, setSelectedId] = useState<string | null>("");
 
 
   const nearby = useMemo(() => courses.filter((c) => c.mode !== "online" && c.location), []);

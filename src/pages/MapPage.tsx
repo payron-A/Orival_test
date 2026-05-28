@@ -61,14 +61,18 @@ export default function MapPage() {
         ))}
       </div>
       {showFilters && (
-        <div className="flex flex-wrap gap-2 rounded-xl2 border border-base-border bg-base-panel p-3 text-xs text-ink-secondary">
+        <div className="flex flex-wrap gap-2 rounded-xl2 border border-base-border 
+                bg-base-panel p-3 text-xs text-ink-secondary">
           <button onClick={() => setShowFilters(false)} className="ml-auto flex items-center gap-1 text-ink-muted">
             <i className="fa-solid fa-xmark text-lg"></i>
           </button>
-          <div className="w-full grid grid-cols-2 sm:grid-cols-4 gap-2 mt-1">
-            <FilterChip label="Category" />
+          <div className="relative w-full flex overflow-x-auto gap-2">
             <FilterChip label="Distance" />
             <FilterChip label="Rating" />
+            <FilterChip label="Price" />
+            <FilterChip label="Price" />
+            <FilterChip label="Price" />
+            <FilterChip label="Price" />
             <FilterChip label="Price" />
           </div>
         </div>
@@ -76,10 +80,13 @@ export default function MapPage() {
     </div>
     <div className="flex-1 px-4 lg:px-8 pb-4 min-h-0">
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-4 h-full">
-        <div className="relative h-[60vh] lg:h-full">
-          <MapView markers={markers} selectedId={selected?.id} onSelect={setSelectedId} className="h-full" />
+        <div className="relative isolate h-[60vh] lg:h-full">
+          <div className="absolute inset-0">
+            <MapView markers={markers} selectedId={selected?.id} onSelect={setSelectedId} 
+                   className=" h-full w-full z-30" />
+          </div>
           {selected && (
-            <div className="lg:hidden absolute bottom-3 inset-x-3">
+            <div className="lg:hidden absolute z-50  bottom-3 w-full p-3 max-w-lg">
               <MapPreviewCard course={selected} onClose={() => setSelectedId(null)} />
             </div>
           )}
@@ -90,12 +97,11 @@ export default function MapPage() {
           <div className="flex flex-col gap-2.5">
             {filtered.map((c) => (
               <button
-                key={c.id}
-                onClick={() => setSelectedId(c.id)}
-                className={`flex items-center gap-2.5 rounded-xl2 border p-2.5 text-left transition-colors ${
-                  c.id === selected?.id ? "border-orival/50 bg-orival/5" : "border-base-border bg-base-panel hover:border-base-border2"
-                }`}
-              >
+                  key={c.id}
+                  onClick={() => setSelectedId(c.id)}
+                  className={`flex items-center gap-2.5 rounded-xl2 border p-2.5 text-left transition-colors ${
+                    c.id === selected?.id ? "border-orival/50 bg-orival/5" : "border-base-border bg-base-panel hover:border-base-border2"
+                  }`}>
                 <img src={c.thumbnailUrl} className="h-14 w-16 rounded-lg object-cover" alt="" />
                 <div className="min-w-0">
                   <p className="text-sm font-medium text-ink-primary line-clamp-1">{c.title}</p>

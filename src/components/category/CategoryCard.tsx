@@ -11,7 +11,7 @@ export function CategoryCard({ category, size = "md" }: { category: Category; si
         className="inline-flex h-10 w-10 items-center justify-center rounded-lg"
         style={{ backgroundColor: `${category.color}1F`, color: category.color }}
       >
-        <i className="fa-solid fa-car"
+        <i className={category.icon}
             style={{fontSize: size === "sm"?"18px":"20px"}}></i>
       </span>
       <div>

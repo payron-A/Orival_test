@@ -11,7 +11,7 @@ export function ModeBadge({ mode, size = "sm" }: { mode: LearningMode; size?: "s
   const pad = size === "md" ? "px-2.5 py-1 text-xs" : "px-2 py-0.5 text-[11px]";
   return (
     <span
-      className={`inline-flex items-center gap-1 rounded-full font-medium ${pad}`}
+      className={`backdrop-blur inline-flex items-center gap-1 rounded-full font-medium ${pad}`}
       style={{ color: c.color, backgroundColor: c.bg  }}
     >
       <i className="fa-solid fa-location-pin"></i>

@@ -5,11 +5,11 @@ import { MobileHeader } from "../components/layout/MobileHeader";
 
 const menu = [
   { to: "/profile", label: "My Profile", icon: "fa-solid fa-user"},
-  { to: "/enrollments", label: "My Enrollments", icon:"fa-solid fa-circle"},
+  { to: "/enrollments", label: "My Enrollments", icon:"fa-solid fa-circle-dot"},
   { to: "/saved", label: "Saved", icon:"fa-solid fa-bookmark" },
   { to: "/history", label: "History", icon:"fa-solid fa-history"},
   { to: "/notifications", label: "Notifications" ,icon:"fa-solid fa-bell"},
-  { to: "/settings", label: "Settings",icon:"fa-solid fa-edit"},
+  { to: "/settings", label: "Settings",icon:"fa-solid fa-gear"},
 ];
 
 export default function Profile() {
@@ -56,14 +56,14 @@ export default function Profile() {
             >
               <i className={icon}></i>
               <span className="flex-1">{label}</span>
-              <i className="fa-solid fa-arrow-right"></i>
+              <i className="fa-solid fa-chevron-right"></i>
             </Link>
           ))}
           <button
             onClick={() => navigate("/")}
             className="mt-2 flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-semibold text-red-400 hover:bg-red-400/5 transition-colors"
           >
-            <i className="fa-solid fa-door-open"></i>
+            <i className="fa-solid fa-right-from-bracket"></i>
             Log Out
           </button>
         </div>

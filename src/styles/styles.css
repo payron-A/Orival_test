@@ -1169,6 +1169,7 @@ video {
 
 .overflow-x-auto {
   overflow-x: auto;
+  scrollbar-width: none;
 }
 
 .overflow-y-auto {

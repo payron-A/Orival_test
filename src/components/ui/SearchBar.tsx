@@ -48,7 +48,7 @@ export function SearchBar({
             type="button"
             onClick={onFilterClick}
             className="shrink-0 inline-flex items-center gap-1.5 rounded-xl2 border border-base-border bg-base-panel px-3.5 py-2.5 text-sm text-ink-secondary hover:text-ink-primary hover:border-base-border2">
-          <i className="fa-solid fa-bars text-ink-muted"></i>
+              <i className="fa-solid fa-sliders text-ink-muted"></i>
           <span className="hidden sm:inline">Filters</span>
         </button>
       )}
