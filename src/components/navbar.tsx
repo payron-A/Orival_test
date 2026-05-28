@@ -21,12 +21,12 @@ function Navbar({active,setActive}){
 return(
 <header className="navbar">
   <div className="container">
-    <a className="logo">
+    <Link to="/" className="logo">
       <span className="logo-text">
         <span className="accent">O</span>
         RIVAL
       </span>
-    </a>
+    </Link>
     <nav className="nav-links">
       <Link to="/" className={`${active === "Discover"?"active":""}`}
          onClick={()=>setActive("Discover")}>

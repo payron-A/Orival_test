@@ -11,26 +11,9 @@ type MyEnrollmentCourses = {
   complete : number,
   imgSrc : string,
 }
-function MyEnrollment(){
+function MyEnrollment({courses}){
   const [active,setActive] = useState<string>("In Progress");
-  const myEnrollmentCourses : MyEnrollmentCourses[] = [
-    {
-      category:"Driving",title:"Advanced Driving School",lastLessons :"3/24",
-      star:4.5,complete:40,imgSrc:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEeW1ho5g5KlEkHoJvTyF7wF-dMr9wQI5c_B-C0o8veg&s=10"
-    },
-    {
-      category:"Language",title:"English Conversation Skills",lastLessons:"2/12",
-      star:4.6 ,complete:58,imgSrc:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQs9CmeU3c-v7KdaU4FdLpdRgHM-BMkDILtk5LXTlsNkQ&s=10"
-    },
-    {
-      category:"Design",title:"UI/UX",lastLessons:"1/1",
-      star:3.5,complete:90,imgSrc:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoTRD6StLMNAjhEsr97vl4SbJkJS_YlIb4k2OnEHv23w&s=10"
-    },
-    {
-      category:"Business",title:"Digital Marketing",lastLessons:"1/12",
-      star:4.9,complete:10,imgSrc:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEeW1ho5g5KlEkHoJvTyF7wF-dMr9wQI5c_B-C0o8veg&s=10"
-    },
-  ]
+  const myEnrollmentCourses : MyEnrollmentCourses[] = [...courses].filter(course => course.InMyEnrollment);
 return (
 <>
 <main className="section">
@@ -53,7 +36,8 @@ return (
     <div className="enroll-panel" style={{display:active === "In Progress"? "flex":"none"}}>
       {
         myEnrollmentCourses.map(course =>
-          <MyEnrollmentPanel title={course.title}
+          <MyEnrollmentPanel key={course.title}
+                             title={course.title}
                              category={course.category}
                              lastLessons={course.lastLessons}
                              star={course.star}

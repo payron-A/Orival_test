@@ -29,7 +29,8 @@ return (
     <div className="category-grid">
       {
         Categories.map((category => 
-          <CategoryPanel title={category.title}
+          <CategoryPanel key={category.title}
+                         title={category.title}
                          count={category.count}
                          iconName={category.iconName}/>
         ))
