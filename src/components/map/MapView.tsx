@@ -3,11 +3,9 @@ import L from "leaflet";
 import {
   MapContainer,
   Marker,
-  Popup,
   TileLayer,
   useMap,
 } from "react-leaflet";
-import type { Map as LeafletMap } from "leaflet";
 import { useEffect} from "react";
 
 export interface MapMarkerData {
@@ -137,9 +135,6 @@ export function MapView({
                 },
               }}
             >
-              {/* <Popup>
-                <strong>{marker.label}</strong>
-              </Popup> */}
             </Marker>
           );
         })}

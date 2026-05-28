@@ -1,22 +1,22 @@
 import { useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { courses, providers, categories } from "../data";
-import type { Course } from "../types";
+import type { Course } from "../types/courses";
 import { CourseListItem } from "../components/course/CourseListItem";
 import { ProviderListRow } from "../components/provider/ProviderCard";
 import { CategoryCard } from "../components/category/CategoryCard";
 import { SearchBar } from "../components/ui/SearchBar";
 import { MobileHeader } from "../components/layout/MobileHeader";
+import { FilterChip } from "../components/ui/FilterChip";
 
 type Tab = "all" | "courses" | "providers" | "categories";
 
 export default function SearchResults() {
 
-// _____ use searchParams to get input value with {q key}:
+//_____Use Search Params to get input value with {q key}:
   const [params, setParams] = useSearchParams();
   const q = params.get("q") ?? "";
 
-// _____ STATE _____
 // _____ Tabs _____
   const [tab, setTab] = useState<Tab>("all");
   const [category,setCategory] = useState<string>("");
@@ -49,8 +49,13 @@ export default function SearchResults() {
     () => (q.trim() ? categories.filter((c) => c.name.toLowerCase().includes(q.toLowerCase())) : categories),
     [q]
   );
-  const total = matchedCourses.length ;
-
+  const total =matchedProviders.length + matchedCourses.length + matchedCategories.length ;
+  const tabs: { key: Tab; label: string; count: number }[] = [
+    { key: "all", label: "All", count: total },
+    { key: "courses", label: "Courses", count: matchedCourses.length },
+    { key: "providers", label: "Providers", count: matchedProviders.length },
+    { key: "categories", label: "Categories", count: matchedCategories.length },
+  ];
 // _____ By Options _____
   function Filter(course:Course){
     const matchCategory = category?course.categoryId === category.toLocaleLowerCase():true;
@@ -86,22 +91,76 @@ export default function SearchResults() {
     }
   }
 
-  const tabs: { key: Tab; label: string; count: number }[] = [
-    { key: "all", label: "All", count: total },
-    { key: "courses", label: "Courses", count: matchedCourses.length },
-    { key: "providers", label: "Providers", count: matchedProviders.length },
-    { key: "categories", label: "Categories", count: matchedCategories.length },
-  ];
-
+  const [showFilters, setShowFilters] = useState(false);
+  const FilterChipOption: {
+    label: string;
+    options: {
+        key: string;
+        value: string;
+    }[];
+    value: string;
+    onSelectChange:(value: string) => void;
+  }[] = [
+    {
+      label:"Category",
+      options:categories.slice(0,6).map((c) =>({key: c.id,value : c.name})),
+      value:category,
+      onSelectChange:setCategory
+    },
+    {
+      label:"learning Mode",
+      // "In-Person", "Online", "Hybrid"
+      options:[
+        {key:"in-person",value:"In-Person"},
+        {key:"online",value:"Online"},
+        {key:"hybrid",value:"Hybrid"}
+      ],
+      value:learningMode,
+      onSelectChange:setLearningMode
+    },
+    {
+      label:"Level",
+      // ["All levels","advanced", "Intermediate","Beginner"]
+      options:[
+        {key:"all-levels",value:"All levels"},
+        {key:"advanced",value:"advanced"},
+        {key:"intermediate",value:"Intermediate"},
+        {key:"beginner",value:"Beginner"},
+      ],
+      value:level,
+      onSelectChange:setLevel
+    },
+    {
+      label:"Price",
+      // ["Under 8,000 DZD", "8,000–15,000 DZD", "15,000+ DZD"]
+      options:[
+        {key:"u-8000",value:"Under 8,000 DZD"},
+        {key:"8000-15000",value:"8,000–15,000 DZD"},
+        {key:"m-15000",value:"15,000+ DZD"},
+      ],
+      value:price,
+      onSelectChange:setPrice
+    },
+    {
+      label:"Rating",
+      // ["4.5 & up", "4.0 & up", "3.5 & up"]
+      options:[
+        {key:"4.5-up",value:"4.5 & up"},
+        {key:"4.0-up",value:"4.0 & up"},
+        {key:"3.5-up",value:"4.0 & up"},
+      ],
+      value:rating,
+      onSelectChange:setRating
+    }
+  ]
   return (
     <div>
       <MobileHeader back title="Search" />
-
       <div className="px-4 lg:px-8 pt-4 lg:pt-7">
         <SearchBar
           value={q}
           withFilterButton
-          onFilterClick={()=>filterListRef?.current.classList.toggle("hidden")}
+          onFilterClick={()=>setShowFilters(f => !f)}
           onChange={(v) => setParams(v ? { q: v } : {})}
           placeholder="Search courses, providers, categories..."/>
 
@@ -112,6 +171,24 @@ export default function SearchResults() {
         )}
 
         {/* TOP FILTERS */}
+        {showFilters && (
+          <div className="lg:hidden flex flex-wrap gap-2 rounded-xl2 border border-base-border 
+                    bg-base-panel p-3 text-xs text-ink-secondary mt-2">
+            <button onClick={() => setShowFilters(false)} 
+                    className="ml-auto flex items-center gap-1 text-ink-muted">
+              <i className="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div className="relative w-full flex overflow-x-auto gap-2">
+            {FilterChipOption.map(o =>(
+              <FilterChip key={o.label}
+                  label={o.label}
+                  options={o.options}
+                  value={o.value}
+                  onSelectChange={o.onSelectChange}/>
+            ))}
+            </div>
+          </div>
+        )}
         <div className="mt-3 flex gap-1 border-b border-base-border overflow-x-auto no-scrollbar">
           {tabs.map((t) => (
             <button
@@ -125,23 +202,23 @@ export default function SearchResults() {
             </button>
           ))}
         </div>
-
         <div className={`${(tab === "all" || tab === "courses")?"grid grid-cols-1":""} 
                         lg:grid-cols-[220px_1fr] gap-6 mt-5 pb-8`}>
+
           {/* SIDE FILTERS */}
           {(tab === "all" || tab === "courses")&&
-            <aside className="lg:flex flex-col gap-5" ref={filterListRef}>
+            <aside className="hidden lg:flex flex-col gap-5" ref={filterListRef}>
               <FilterGroup title="Category" options={categories.slice(0, 6).map((c) => c.name)} 
-                           onChange={setCategory} />
+                           onChange={setCategory} value={category}/>
               <FilterGroup title="Learning mode" options={["In-Person", "Online", "Hybrid"]} 
-                           onChange={setLearningMode} />
+                           onChange={setLearningMode} value={learningMode}/>
               <FilterGroup title="Level" options={["All levels","advanced", "Intermediate","Beginner"]} 
-                           onChange={setLevel}/>
+                           onChange={setLevel} value={level}/>
               <FilterGroup title="Price" options={["Under 8,000 DZD", "8,000–15,000 DZD", "15,000+ DZD"]} 
-                           onChange={setPrice}/>
+                           onChange={setPrice} value={price}/>
               <FilterGroup title="Rating" options={["4.5 & up", "4.0 & up", "3.5 & up"]} 
-                           onChange={setRating}/>
-          </aside>
+                           onChange={setRating} value={rating}/>
+            </aside>
           }
 
           {/* RESULT AREA */}
@@ -156,7 +233,6 @@ export default function SearchResults() {
                 </div>
               </section>
             )}
-
             {(tab === "all" || tab === "providers") && matchedProviders.length > 0 && (
               <section>
                 <h2 className="font-display text-base font-semibold mb-2.5 text-ink-primary">Providers</h2>
@@ -167,7 +243,6 @@ export default function SearchResults() {
                 </div>
               </section>
             )}
-
             {(tab === "all" || tab === "categories") && matchedCategories.length > 0 && (
               <section>
                 <h2 className="font-display text-base font-semibold mb-2.5 text-ink-primary">Categories</h2>
@@ -178,7 +253,6 @@ export default function SearchResults() {
                 </div>
               </section>
             )}
-
             {total === 0 && (
               <p className="text-sm text-ink-muted py-10 text-center">
                 No results found  {q?`for "${q}"`:""}.
@@ -191,9 +265,8 @@ export default function SearchResults() {
   );
 }
 
-function FilterGroup({ title, options,onChange }
-  :{ title: string; options: string[];onChange:React.Dispatch<React.SetStateAction<string>> }) {
-
+function FilterGroup({ title, options,onChange ,value}
+  :{ title: string; options: string[];onChange:React.Dispatch<React.SetStateAction<string>>,value?:string }) {
   return (
     <div>
       <h3 className="text-xs font-semibold text-ink-muted mb-2">{title}</h3>
@@ -210,6 +283,8 @@ function FilterGroup({ title, options,onChange }
                   
 
             <input name={`check-${title}`} type="radio"
+                    checked={value === o?true:false}
+                    onChange={()=> 0}
                    className="h-3.5 w-3.5 rounded border-base-border2 accent-orival"/>
             {o}
           </label>)

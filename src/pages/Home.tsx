@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { courses, providers } from "../data";
+import { providers } from "../data";
 import { CourseCard } from "../components/course/CourseCard";
 import { FilterChip } from "../components/ui/FilterChip";
 import { SearchBar } from "../components/ui/SearchBar";
@@ -8,23 +8,24 @@ import { MapView } from "../components/map/MapView";
 import { MapPreviewCard } from "../components/map/MapPreviewCard";
 import { MobileHeader } from "../components/layout/MobileHeader";
 import { currentUser } from "../data";
+import { useCourses } from "../context/CoursesContext";
 
-// _____ STATE _____
-// _____ Const Types of Filters _____
+
+// _____ Const Types of Filters:
 const filters = ["All", "Near Me", "In-Person", "Online", "Hybrid"] as const;
+
 
 export default function Home() {
 
   const navigate = useNavigate();
-  
-  // _____ STATE _____
-  // _____ Active filter Type _____
-  const [activeFilter, setActiveFilter] = useState<(typeof filters)[number]>("All");
+  const {localCourses} = useCourses();
+
+// _____ FILTER _____
+// _____ Active filter Type:
   const [selectedId, setSelectedId] = useState<string | null>("");
-
-
-  const nearby = useMemo(() => courses.filter((c) => c.mode !== "online" && c.location), []);
-
+  const [activeFilter, setActiveFilter] = useState<(typeof filters)[number]>("All");
+// _____ filter courses with locations by tabs:
+  const nearby = useMemo(() => localCourses?.filter((c) => c.mode !== "online" && c.location), []);
   const filteredNearby = useMemo(() => {
     if (activeFilter === "All" || activeFilter === "Near Me") return nearby;
     if (activeFilter === "In-Person") return nearby.filter((c) => c.mode === "in-person");
@@ -32,9 +33,8 @@ export default function Home() {
     if (activeFilter === "Hybrid") return nearby.filter((c) => c.mode === "hybrid");
     return nearby;
   }, [activeFilter, nearby]);
-
-  const nearbyCourses = useMemo(() => courses.filter((c) => c.mode !== "online").slice(0, 4), []);
-  const recommended = useMemo(() => courses.slice(4, 10), []);
+  const nearbyCourses = useMemo(() => localCourses?.filter((c) => c.mode !== "online").slice(0, 4), []);
+  const recommended = useMemo(() => localCourses?.slice(4, 10), []);
   const selectedCourse = filteredNearby.find((c) => c.id === selectedId) ?? filteredNearby[0];
 
   const markers = filteredNearby
@@ -43,7 +43,6 @@ export default function Home() {
   return (
     <div>
         <MobileHeader showBell />
-
         {/* HERO SECTION */}
         <div className="px-4 lg:px-8 pt-5 lg:pt-7 pb-4">
             <h1 className="font-display text-2xl lg:text-3xl font-bold leading-tight text-ink-primary">
@@ -67,15 +66,12 @@ export default function Home() {
                 ))}
             </div>
         </div>
-
         {/* MAP SECTION */}
         <div className="px-4 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_1fr] gap-5">
               <div className="flex flex-col gap-3">
-                <MapView  markers={markers} 
-                          selectedId={selectedCourse?.id} 
-                          onSelect={setSelectedId} 
-                          className="h-64 lg:h-[380px]" />
+                <MapView  markers={markers} selectedId={selectedCourse?.id} 
+                          onSelect={setSelectedId} className="h-64 lg:h-[380px]"/>
                 {selectedCourse && (
                   <div className="lg:hidden">
                     <MapPreviewCard course={selectedCourse} />
@@ -110,7 +106,6 @@ export default function Home() {
               </div>
             </div>
         </div>
-
         {/* SURGGEST COURSES */}
         <section className="px-4 lg:px-8 mt-7">
             <div className="flex items-center justify-between mb-3">
@@ -131,7 +126,6 @@ export default function Home() {
               ))}
             </div>
         </section>
-
         {/* RECOMMEND COURSES */}
         <section className="px-4 lg:px-8 mt-7 ">
             <div className="flex items-center justify-between mb-3">
@@ -150,7 +144,6 @@ export default function Home() {
               ))}
             </div>
         </section>
-
         {/* TOP PROVIDER */}
         <section className="px-4 lg:px-8 mt-7 mb-4">
             <div className="flex items-center justify-between mb-3">

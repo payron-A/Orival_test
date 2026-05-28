@@ -1,4 +1,5 @@
-import type { AppNotification, HistoryEntry, User } from "../types";
+import type { HistoryEntry, User } from "../types/user";
+import type { AppNotification } from "../types/category";
 
 export const notifications: AppNotification[] = [
   { id: "n1", category: "update", title: "New course from Photography Academy", body: "\u201cStreet Photography\u201d just published \u2014 follow it to get notified of new lessons.", timeAgo: "2h ago", read: false },

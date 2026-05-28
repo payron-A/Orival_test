@@ -2,7 +2,7 @@ import { useState } from "react";
 import { notifications } from "../data";
 import { MobileHeader } from "../components/layout/MobileHeader";
 import { useApp } from "../context/AppContext";
-import type { NotificationCategory } from "../types";
+import type { NotificationCategory } from "../types/category";
 
 const catColor: Record<NotificationCategory, string> = {
   update: "#3E8FFF",

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import type { Category } from "../../types";
+import type { Category } from "../../types/category";
 
 export function CategoryCard({ category, size = "md" }: { category: Category; size?: "sm" | "md" }) {
   return (

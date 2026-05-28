@@ -1,7 +1,8 @@
-import type { Course, Review, CourseSection } from "../types";
+import type { Course, Review, CourseSection } from "../types/courses";
 
 // ---- Reusable, topic-appropriate curriculum + review sets -----------------
 
+// ____ Reviews___________
 function reviews(list: { author: string; rating: number; date: string; comment: string; avatar: string }[], prefix: string): Review[] {
   return list.map((r, i) => ({
     id: `${prefix}${i + 1}`,
@@ -52,6 +53,7 @@ const practicalReviews = reviews(
   "prac-r"
 );
 
+// ____ Sections___________
 function sections(groups: { title: string; lessons: { title: string; duration: string; completed?: boolean; locked?: boolean }[] }[], prefix: string): CourseSection[] {
   return groups.map((g, gi) => ({
     id: `${prefix}s${gi + 1}`,
@@ -242,7 +244,7 @@ const cookingSections = sections(
   "cook-"
 );
 
-// ---- Courses ---------------------------------------------------------------
+// ___ Courses __________
 
 export const courses: Course[] = [
   {

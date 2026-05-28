@@ -5,7 +5,8 @@ import { MapPreviewCard } from "../components/map/MapPreviewCard";
 import { FilterChip } from "../components/ui/FilterChip";
 import { SearchBar } from "../components/ui/SearchBar";
 import { MobileHeader } from "../components/layout/MobileHeader";
-import type { LearningMode } from "../types";
+import type { LearningMode } from "../types/courses";
+
 
 const modeFilters: { key: "all" | LearningMode; label: string }[] = [
   { key: "all", label: "All" },
@@ -13,36 +14,42 @@ const modeFilters: { key: "all" | LearningMode; label: string }[] = [
   { key: "online", label: "Online" },
   { key: "hybrid", label: "Hybrid" },
 ];
+//______ Options ___________
+//____Distance:
+const distanceOptions: {key:string,value:string}[] = [
+    { key: "5", value: "Under 5 km" },
+    { key: "10", value: "Under 10 km" },
+    { key: "25", value: "Under 25 km" },
+]
 
 export default function MapPage() {
   const [query, setQuery] = useState("");
   const [mode, setMode] = useState<"all" | LearningMode>("all");
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [showFilters, setShowFilters] = useState(false);
-
+  const [maxDistanceKm, setMaxDistanceKm] = useState<string>("");
+  
   const locatable = useMemo(() => courses.filter((c) => c.location), []);
   const filtered = useMemo(() => {
-    return locatable.filter((c) => {
+    let result = locatable.filter((c) => {
       if (mode !== "all" && c.mode !== mode) return false;
       if (query.trim() && !c.title.toLowerCase().includes(query.toLowerCase())) return false;
+      if (maxDistanceKm && c.distanceKm > Number(maxDistanceKm.split(" ")[1])) return false;
       return true;
     });
-  }, [locatable, mode, query]);
+    return result;
+  }, [locatable, mode, query, maxDistanceKm]);
 
   const selected = filtered.find((c) => c.id === selectedId);
-  const markers = filtered.map((c) => ({ id: c.id, lat: c.location!.lat, lng: c.location!.lng, label: c.title }));
+  const markers = filtered.map((c) => ({ 
+    id: c.id, lat: c.location!.lat, lng: c.location!.lng, label: c.title })
+  );
 
 
   return (
   <div className="flex flex-col lg:h-[calc(100vh-64px)]">
-    <MobileHeader
-      title="Map"
-      right={
-        <button onClick={() => setShowFilters((s) => !s)} className="text-ink-primary">
-          <i className="fa-solid fa-filter"></i>
-        </button>
-      }
-    />
+    <MobileHeader title="Map"/>
+
+    {/* HERO SECTION */}
     <div className="px-4 lg:px-8 pt-4 lg:pt-6 pb-3 flex flex-col gap-3">
       <div className="hidden lg:block">
         <h1 className="font-display text-2xl font-bold text-ink-primary">Map</h1>
@@ -52,41 +59,29 @@ export default function MapPage() {
         value={query}
         onChange={setQuery}
         placeholder="Search a skill or course..."
-        withFilterButton
-        onFilterClick={() => setShowFilters((s) => !s)}
-      />
+        withFilterButton/>
       <div className="flex gap-2 overflow-x-auto no-scrollbar">
         {modeFilters.map((f) => (
           <FilterChip key={f.key} label={f.label} active={mode === f.key} onClick={() => setMode(f.key)} />
         ))}
+        <FilterChip label="Distance"
+              options={distanceOptions}
+              value={maxDistanceKm}
+              onSelectChange={setMaxDistanceKm}
+            />
       </div>
-      {showFilters && (
-        <div className="flex flex-wrap gap-2 rounded-xl2 border border-base-border 
-                bg-base-panel p-3 text-xs text-ink-secondary">
-          <button onClick={() => setShowFilters(false)} className="ml-auto flex items-center gap-1 text-ink-muted">
-            <i className="fa-solid fa-xmark text-lg"></i>
-          </button>
-          <div className="relative w-full flex overflow-x-auto gap-2">
-            <FilterChip label="Distance" />
-            <FilterChip label="Rating" />
-            <FilterChip label="Price" />
-            <FilterChip label="Price" />
-            <FilterChip label="Price" />
-            <FilterChip label="Price" />
-            <FilterChip label="Price" />
-          </div>
-        </div>
-      )}
     </div>
+
+    {/* MAP Preview */}
     <div className="flex-1 px-4 lg:px-8 pb-4 min-h-0">
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-4 h-full">
-        <div className="relative isolate h-[60vh] lg:h-full">
+        <div className="relative h-[60vh] lg:h-full">
           <div className="absolute inset-0">
             <MapView markers={markers} selectedId={selected?.id} onSelect={setSelectedId} 
                    className=" h-full w-full z-30" />
           </div>
           {selected && (
-            <div className="lg:hidden absolute z-50  bottom-3 w-full p-3 max-w-lg">
+            <div className="lg:hidden absolute z-40  bottom-3 w-full p-3 max-w-lg">
               <MapPreviewCard course={selected} onClose={() => setSelectedId(null)} />
             </div>
           )}

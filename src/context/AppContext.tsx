@@ -1,5 +1,5 @@
 import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
-import type { Enrollment, EnrollmentStatus } from "../types";
+import type { Enrollment, EnrollmentStatus } from "../types/user";
 import { courses } from "../data";
 import { notifications as seedNotifications } from "../data";
 
@@ -33,7 +33,6 @@ const initialEnrollments: Record<string, Enrollment> = {
   "graphic-design-masterclass": { courseId: "graphic-design-masterclass", status: "not-started", progress: 0, enrolledAt: "2026-08-02" },
   "english-conversation-skills": { courseId: "english-conversation-skills", status: "completed", progress: 100, enrolledAt: "2026-01-05" },
 };
-
 export function AppProvider({ children }: { children: ReactNode }) {
   const [savedCourseIds, setSavedCourseIds] = useState<Set<string>>(new Set(["advanced-photography", "python-for-beginners", "digital-marketing-2024", "photo-editing-lightroom"]));
   const [savedProviderIds, setSavedProviderIds] = useState<Set<string>>(new Set());

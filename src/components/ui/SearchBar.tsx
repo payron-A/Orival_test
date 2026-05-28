@@ -25,8 +25,7 @@ export function SearchBar({
     <form className="flex items-center gap-2 w-full"
           onSubmit={(e) => {
               e.preventDefault();
-              onSubmit?.(current);
-          }}>
+              onSubmit?.(current);}}>
             
       {/* INPUT */}
       <div className={`flex items-center flex-1 gap-2.5 rounded-xl2 border border-base-border 
@@ -44,13 +43,15 @@ export function SearchBar({
 
       {/* FILTER BUTTON */}
       {withFilterButton && (
-        <button
+        <div className="lg:hidden">
+          <button
             type="button"
             onClick={onFilterClick}
             className="shrink-0 inline-flex items-center gap-1.5 rounded-xl2 border border-base-border bg-base-panel px-3.5 py-2.5 text-sm text-ink-secondary hover:text-ink-primary hover:border-base-border2">
               <i className="fa-solid fa-sliders text-ink-muted"></i>
-          <span className="hidden sm:inline">Filters</span>
-        </button>
+              <span className="hidden sm:inline">Filters</span>
+          </button>
+        </div>
       )}
     </form>
   );

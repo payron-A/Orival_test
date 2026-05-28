@@ -1,4 +1,4 @@
-import type { LearningMode } from "../../types";
+import type { LearningMode } from "../../types/courses";
 
 const CONFIG: Record<LearningMode, { label: string; color: string; bg: string; }> = {
   "in-person": { label: "In-person", color: "#FF7A26", bg: "rgba(255,122,38,0.12)" },

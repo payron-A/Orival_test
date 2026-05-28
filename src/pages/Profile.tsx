@@ -4,7 +4,7 @@ import { useApp } from "../context/AppContext";
 import { MobileHeader } from "../components/layout/MobileHeader";
 
 const menu = [
-  { to: "/profile", label: "My Profile", icon: "fa-solid fa-user"},
+  { to: "/dashboard", label: "Dashboard", icon: "fa-solid fa-dashboard"},
   { to: "/enrollments", label: "My Enrollments", icon:"fa-solid fa-circle-dot"},
   { to: "/saved", label: "Saved", icon:"fa-solid fa-bookmark" },
   { to: "/history", label: "History", icon:"fa-solid fa-history"},

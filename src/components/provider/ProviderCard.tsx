@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import type { Provider } from "../../types";
+import type { Provider } from "../../types/provider";
 import { Rating } from "../ui/Rating";
 
 export function ProviderCard({ provider }: { provider: Provider }) {

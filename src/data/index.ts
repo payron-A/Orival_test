@@ -6,7 +6,9 @@ export { notifications, historyEntries, currentUser } from "./notifications";
 import { categories } from "./categories";
 import { providers } from "./providers";
 import { courses } from "./courses";
-import type { Course, Provider, Category } from "../types";
+import type { Course } from "../types/courses";
+import type { Category } from "../types/category";
+import type { Provider } from "../types/provider";
 
 export function getCourseById(id: string): Course | undefined {
   return courses.find((c) => c.id === id);

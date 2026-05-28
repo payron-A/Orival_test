@@ -1,7 +1,7 @@
 import { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 import { AppShell } from "./components/layout/AppShell";
-
+import Dashboard from "./pages/Dashboard";
 const Home = lazy(() => import("./pages/Home"));
 const Explore = lazy(() => import("./pages/Explore"));
 const MapPage = lazy(() => import("./pages/MapPage"));
@@ -20,10 +20,11 @@ const Profile = lazy(() => import("./pages/Profile"));
 const Settings = lazy(() => import("./pages/Settings"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
+
 function PageFallback() {
   return (
-    <div className="flex items-center justify-center py-24">
-      <div className="h-6 w-6 animate-spin rounded-full border-2 border-base-border2 border-t-orival" />
+    <div className="flex h-full items-center justify-center py-24">
+      <div className="h-7 w-7 animate-spin rounded-full border-2 border-base-border2 border-t-orival" />
     </div>
   );
 }
@@ -50,6 +51,7 @@ export default function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Route>
       </Routes>
     </Suspense>

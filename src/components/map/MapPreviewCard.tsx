@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import type { Course } from "../../types";
+import type { Course } from "../../types/courses";
 import { Rating } from "../ui/Rating";
 import { ModeBadge } from "../ui/ModeBadge";
 import { getProviderById } from "../../data";

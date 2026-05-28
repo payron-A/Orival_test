@@ -4,7 +4,7 @@ import { getCourseById, getProviderById } from "../data";
 import { ProgressBar } from "../components/ui/ProgressBar";
 import { MobileHeader } from "../components/layout/MobileHeader";
 import { useApp } from "../context/AppContext";
-import type { EnrollmentStatus } from "../types";
+import type { EnrollmentStatus } from "../types/user";
 
 const tabs: { key: EnrollmentStatus; label: string }[] = [
   { key: "in-progress", label: "In Progress" },

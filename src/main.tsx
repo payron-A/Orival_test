@@ -4,12 +4,15 @@ import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 import { AppProvider } from "./context/AppContext";
+import { CoursesProvider } from './context/CoursesContext';
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
       <AppProvider>
-        <App />
+        <CoursesProvider>
+            <App />
+        </CoursesProvider>
       </AppProvider>
     </BrowserRouter>
   </StrictMode>
