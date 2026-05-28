@@ -1,13 +1,6 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+
 
 html, body, #root { height: 100%; }
-
-body {
-  @apply bg-base-bg text-ink-primary font-body antialiased;
-  -webkit-tap-highlight-color: transparent;
-}
 
 h1, h2, h3, h4, .font-display {
   font-family: 'Sora', ui-sans-serif, system-ui, sans-serif;
@@ -24,8 +17,7 @@ h1, h2, h3, h4, .font-display {
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
 :focus-visible {
-  outline: 2px solid #FF7A26;
-  outline-offset: 2px;
+  outline: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

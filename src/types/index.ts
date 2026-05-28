@@ -1,6 +1,6 @@
 export type LearningMode = "in-person" | "online" | "hybrid";
 
-export type CourseLevel = "Beginner" | "Intermediate" | "Advanced" | "All levels";
+export type CourseLevel = "beginner" | "intermediate" | "advanced" | "all levels";
 
 export interface GeoLocation {
   lat: number;
