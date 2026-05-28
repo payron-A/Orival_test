@@ -1,51 +1,57 @@
-import { CourseApi } from '../public/APIs/courseAPI.js'
-import Home from "./pages/home";
-import Saved from "./pages/saved";
-import Navbar from "./components/navbar";
-import Category from "./pages/category";
-import MyEnrollment from "./pages/myEnrollment";
-import CourseDetails from "./pages/courseDetails";
-import SearchResult from "./pages/searchResult";
-import { Route,Routes} from "react-router-dom";
-import { useEffect, useState } from "react";
-function App() {
+import { lazy, Suspense } from "react";
+import { Routes, Route } from "react-router-dom";
+import { AppShell } from "./components/layout/AppShell";
 
-  const [active,setActive] = useState<string>("Discover");
-  const [courses,setCourses] = useState<any[]>(
-    JSON.parse(localStorage.getItem("courses")) || []
-  );
-//  ==================
-//  FETCH LOCAL API
-//  ==================
-    useEffect(()=>{
-      const load = async()=>{
-        const data = await CourseApi();
-        if(courses.length === 0){
-          setCourses(data);
-        } 
-      }
-      load();
-    },[])
+const Home = lazy(() => import("./pages/Home"));
+const Explore = lazy(() => import("./pages/Explore"));
+const MapPage = lazy(() => import("./pages/MapPage"));
+const Categories = lazy(() => import("./pages/Categories"));
+const CategoryDetail = lazy(() => import("./pages/CategoryDetail"));
+const SearchResults = lazy(() => import("./pages/SearchResults"));
+const CourseDetails = lazy(() => import("./pages/CourseDetails"));
+const ProviderPage = lazy(() => import("./pages/Provider"));
+const CoursePlayer = lazy(() => import("./pages/CoursePlayer"));
+const MyLearning = lazy(() => import("./pages/MyLearning"));
+const Saved = lazy(() => import("./pages/Saved"));
+const Enrollments = lazy(() => import("./pages/Enrollments"));
+const HistoryPage = lazy(() => import("./pages/History"));
+const Notifications = lazy(() => import("./pages/Notifications"));
+const Profile = lazy(() => import("./pages/Profile"));
+const Settings = lazy(() => import("./pages/Settings"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
-//  Save Data in LocalStorage
-  useEffect(()=>{
-    localStorage.setItem("courses",JSON.stringify(courses));
-  },[])
-
-
+function PageFallback() {
   return (
-<>
-<Navbar active={active} setActive={setActive}/>
-<Routes>
-  <Route path="/" element={<Home setActive={setActive}courses={courses}/>}/>
-  <Route path="/category" element={<Category/>}/>
-  <Route path="/saved" element={<Saved courses={courses}/>}/>
-  <Route path="/myEnrollment" element={<MyEnrollment courses={courses}/>}/>
-  <Route path="/courseDetails/:title" element={<CourseDetails courses={courses} setCourses={setCourses}/>}/>
-  <Route path="/searchResult/" element={<SearchResult/>}/>
-</Routes>
-</>
-)
+    <div className="flex items-center justify-center py-24">
+      <div className="h-6 w-6 animate-spin rounded-full border-2 border-base-border2 border-t-orival" />
+    </div>
+  );
 }
 
-export default App
+export default function App() {
+  return (
+    <Suspense fallback={<PageFallback />}>
+      <Routes>
+        <Route path="/course/:id/learn" element={<CoursePlayer />} />
+        <Route element={<AppShell />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/explore" element={<Explore />} />
+          <Route path="/map" element={<MapPage />} />
+          <Route path="/categories" element={<Categories />} />
+          <Route path="/categories/:id" element={<CategoryDetail />} />
+          <Route path="/search" element={<SearchResults />} />
+          <Route path="/course/:id" element={<CourseDetails />} />
+          <Route path="/provider/:id" element={<ProviderPage />} />
+          <Route path="/my-learning" element={<MyLearning />} />
+          <Route path="/saved" element={<Saved />} />
+          <Route path="/enrollments" element={<Enrollments />} />
+          <Route path="/history" element={<HistoryPage />} />
+          <Route path="/notifications" element={<Notifications />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
+      </Routes>
+    </Suspense>
+  );
+}
