@@ -1,11 +1,14 @@
-import Navbar from "../components/navbar";
+
 import Hero from "../components/hero";
+import Footer from "../components/footer";
+import Card from "../components/card";
 import '../styles/home/home.css'
+
+
 
 export default function Home() {
 return (
 <>
-<Navbar/>
 <Hero/>
 {/* -- POPULAR COURSES -- */}
 <section className="section">
@@ -16,20 +19,7 @@ return (
     </div>
     <div className="course-grid">
 
-      <a href="#" className="course-card">
-        <div className="course-thumb">
-          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEeW1ho5g5KlEkHoJvTyF7wF-dMr9wQI5c_B-C0o8veg&s=10" alt="Advanced Driving School"/>
-          <span className="course-badge"><i className="fa-solid fa-car"></i> Driving</span>
-        </div>
-        <div className="course-body">
-          <div className="course-title">Advanced Driving School</div>
-          <div className="course-meta">
-            <span className="rating"><i className="fa-solid fa-star"></i> 4.8 <span className="count">(120)</span></span>
-            <span className="price">18,000 <span className="unit">DZD</span></span>
-          </div>
-        </div>
-      </a>
-
+      <Card/>
       <a href="#" className="course-card">
         <div className="course-thumb">
           <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQs9CmeU3c-v7KdaU4FdLpdRgHM-BMkDILtk5LXTlsNkQ&s=10" alt="English Conversation Skills"/>
@@ -103,9 +93,7 @@ return (
   </div>
 </section>
 
-<footer className="site-footer">
-  &copy; 2026 ORIVAL — Discover · Learn · Grow
-</footer>
+<Footer/>
 
 {/* -- BOTTOM NAV (mobile) -- */}
 <nav className="bottom-nav">
