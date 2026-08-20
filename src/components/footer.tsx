@@ -1,9 +1,9 @@
 import '../styles/footer.css'
 
-function Footer(){
+function Footer({page}:{page:string}){
 return (
 <footer className="site-footer">
-  &copy; 2026 ORIVAL — Discover · Learn · Grow
+  &copy; 2026 ORIVAL — {page} · Learn · Grow
 </footer>
     )
 }

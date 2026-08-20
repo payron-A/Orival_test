@@ -41,7 +41,7 @@ return(
          onClick={()=>setActive("Saved")}>
          Saved
       </Link>
-      <Link to="/" className={`${active === "My Enrollments"?"active":""}`}
+      <Link to="/myEnrollment" className={`${active === "My Enrollments"?"active":""}`}
          onClick={()=>setActive("My Enrollments")}>
         My Enrollments
       </Link>
@@ -66,12 +66,31 @@ return(
       </button>
     </div>
   </div>
-  <div className="mobile-menu"
-        ref={mobileMenuRef}>
-    <Link to="/" className={`${active === "Discover"?"active":""}`}>Discover</Link>
-    <Link to="/category" className={`${active === "Categories"?"active":""}`}>Categories</Link>
-    <Link to="/saved" className={`${active === "Saved"?"active":""}`}>Saved</Link>
-    <Link to="/" className={`${active === "My Enrollments"?"active":""}`}>My Enrollments</Link>
+  <div className="mobile-menu" ref={mobileMenuRef}>
+    <Link to="/" className={`${active === "Discover"?"active":""}`}
+          onClick={()=>{
+            mobileMenuRef.current.classList.remove("open");
+            setActive("Discover")
+          }}>Discover
+    </Link>
+    <Link to="/category" className={`${active === "Categories"?"active":""}`}
+          onClick={()=>{
+            mobileMenuRef.current.classList.remove("open")
+            setActive("Categories")
+          }}>Categories
+    </Link>
+    <Link to="/saved" className={`${active === "Saved"?"active":""}`}
+          onClick={()=>{
+            mobileMenuRef.current.classList.remove("open")
+            setActive("Saved")
+          }}>Saved
+    </Link>
+    <Link to="/myEnrollment" className={`${active === "My Enrollments"?"active":""}`}
+          onClick={()=>{
+            mobileMenuRef.current.classList.remove("open");
+            setActive("My Enrollments")
+          }}>My Enrollments
+    </Link>
   </div>
 </header>
     )
