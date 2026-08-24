@@ -1,12 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/navbar.css'
 
-function Navbar(){
+function Navbar({active,setActive}){
 
   const mobileMenuRef = useRef<HTMLDivElement | null>(null);
   const menuToggleRef = useRef<HTMLButtonElement | null>(null);
-  const [active,setActive] = useState<string>("Discover");
   useEffect(()=>{
     if(menuToggleRef.current && menuToggleRef.current){
       menuToggleRef.current.onclick = ()=>{
@@ -47,7 +46,7 @@ return(
       </Link>
     </nav>
     <div className="nav-search">
-      <input type="text" className='searchInput'id='search' placeholder='Search courses, skills...'/>
+      <input type="text" className='searchInput' placeholder='Search courses, skills...'/>
       <label htmlFor="search">
         <i className="fa-solid fa-magnifying-glass"></i>
       </label>
@@ -57,7 +56,8 @@ return(
         <i className="fa-regular fa-bell"></i>
         <span className="dot"></span>
       </button>
-      <Link to="/"className="avatar">
+      <Link to="/"className="avatar"
+            onClick={()=>setActive("Discover")}>
         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyW08GCzI1g3iowYTU-UsTGoU9R8u3J68XDzhmJ2tuUw&s=10" alt="profile"/>
       </Link>
       <button className="menu-toggle"

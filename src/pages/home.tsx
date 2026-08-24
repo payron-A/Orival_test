@@ -15,7 +15,7 @@ type PopularCourses = {
   iconName : string,
   imgSrc : string,
 }
-export default function Home() {
+export default function Home({setActive}) {
   const PopularCourses: PopularCourses[] = [
     {
       category:"Driving",title:"Advanced Driving School",price:18000,
@@ -66,7 +66,8 @@ return (
   <div className="container">
     <div className="section-head" style={{marginBottom:"20px"}}>
       <h2>Browse by Category</h2>
-      <Link to="/category" className="view-all">View all <i className="fa-solid fa-chevron-right"></i></Link>
+      <Link to="/category" className="view-all"
+            onClick={()=>setActive("Categories")}>View all <i className="fa-solid fa-chevron-right"></i></Link>
     </div>
     <div className="category-grid">
       <CategoryPanel title="Driving"

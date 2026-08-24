@@ -1,6 +1,5 @@
 import Card from '../components/card'
-import '../styles/saved.css'
-
+import Footer from '../components/footer'
 type PopularCourses = {
   title : string,
   category : string,
@@ -31,10 +30,12 @@ function Saved(){
 
   ]
 return (
+<>
 <main>
     <section className="section">
         <div className="container">
-            <h1>Saved Courses</h1>
+            <h1 className="page-title">Saved Courses</h1>
+            <p className="page-sub">All saved Courses</p>
             <div className="grid course-grid" style={{marginTop:"24px"}}>
                 {savedCourses.map(course=>
                     <Card title={course.title}
@@ -50,6 +51,8 @@ return (
         </div>
     </section>
 </main>
+<Footer page='Saved'/>
+</>
     )
 }
 export default Saved

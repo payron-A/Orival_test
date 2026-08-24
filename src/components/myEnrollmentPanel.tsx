@@ -17,14 +17,15 @@ function MyEnrollmentPanel({title,category,lastLessons,star,complete,imgSrc}:MyE
         <div className="result-meta">
             <span className="rating">
                 <i className="fa-solid fa-star"></i> 
-                {star}
+                <span className='count'>{star}</span>
             </span> 
-            · {category} · {lastLessons} Lessons left
+            <span style={{color:"var(--text-mid)",fontSize:"13px"}}> . {category}  . {lastLessons} Lessons left</span>
         </div>
-        <div className="progress-track">
+        {/* <div className="progress-track">
             <div className="progress-fill" style={{width:"75%"}}></div>
-        </div>
-        <div className="progress-pct">{complete}% Complete</div>
+        </div> */}
+        <div className="progress-pct"
+             style={{fontSize:"13px"}}>{complete}% Complete</div>
     </div>
     <i className="fa-solid fa-chevron-right enroll-arrow"></i>
 </Link>

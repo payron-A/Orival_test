@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import MyEnrollmentPanel from '../components/myEnrollmentPanel';
+import Footer from '../components/footer';
 import '../styles/myEnrollment.css'
 
 type MyEnrollmentCourses = {
@@ -31,6 +32,7 @@ function MyEnrollment(){
     },
   ]
 return (
+<>
 <main className="section">
   <div className="container" >
     <h1 className="page-title">My Enrollments</h1>
@@ -99,9 +101,11 @@ return (
       </a>
  
     </div>
+    
   </div>
 </main>
-
+<Footer page='My Enrollments'/>
+</>
     )
 }
 export default MyEnrollment;

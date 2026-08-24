@@ -50,5 +50,5 @@
 
 @media (max-width: 560px) {
   .enroll-card { gap: 12px; padding: 12px; }
-  .enroll-card img { width: 52px; height: 52px; }
+  /* .enroll-card img { width: 52px; height: 52px; } */
 }
