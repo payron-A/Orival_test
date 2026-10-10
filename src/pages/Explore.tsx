@@ -1,10 +1,13 @@
 import { useNavigate } from "react-router-dom";
-import { courses, categories, providers } from "../data";
+import { categories, providers } from "../data";
 import { CourseCard } from "../components/course/CourseCard";
 import { CategoryCard } from "../components/category/CategoryCard";
 import { MobileHeader } from "../components/layout/MobileHeader";
+import { useApi } from "../context/ApiContext";
+import type { Course } from "../types/courses";
 
-function Row({ title, list, onViewAll }: { title: string; list: typeof courses; onViewAll?: () => void }) {
+
+function Row({ title, list, onViewAll }: { title: string; list: Course[]; onViewAll?: () => void }) {
   if (list.length === 0) return null;
   return (
     <section className="mt-7">
@@ -29,6 +32,7 @@ function Row({ title, list, onViewAll }: { title: string; list: typeof courses; 
 }
 
 export default function Explore() {
+  const { courses } = useApi();
   const navigate = useNavigate();
   const popular = [...courses].sort((a, b) => b.studentCount - a.studentCount).slice(0, 8);
   const highlyRated = [...courses].sort((a, b) => b.rating - a.rating).slice(0, 8);

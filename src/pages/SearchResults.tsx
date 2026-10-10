@@ -1,6 +1,7 @@
 import { useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { courses, providers, categories } from "../data";
+import { useApi } from "../context/ApiContext";
+import { providers, categories } from "../data";
 import type { Course } from "../types/courses";
 import { CourseListItem } from "../components/course/CourseListItem";
 import { ProviderListRow } from "../components/provider/ProviderCard";
@@ -8,11 +9,11 @@ import { CategoryCard } from "../components/category/CategoryCard";
 import { SearchBar } from "../components/ui/SearchBar";
 import { MobileHeader } from "../components/layout/MobileHeader";
 import { FilterChip } from "../components/ui/FilterChip";
-
 type Tab = "all" | "courses" | "providers" | "categories";
 
 export default function SearchResults() {
 
+  const { courses } = useApi();
 //_____Use Search Params to get input value with {q key}:
   const [params, setParams] = useSearchParams();
   const q = params.get("q") ?? "";

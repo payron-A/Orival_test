@@ -3,7 +3,7 @@ import { getCourseById, getProviderById } from "../data";
 import { ModeBadge } from "../components/ui/ModeBadge";
 import { ProgressBar } from "../components/ui/ProgressBar";
 import { MobileHeader } from "../components/layout/MobileHeader";
-import { useApp } from "../context/AppContext";
+import { useApi } from "../context/ApiContext";
 
 const statusStyle: Record<string, string> = {
   "in-progress": "text-orival bg-orival/10",
@@ -17,7 +17,7 @@ const statusLabel: Record<string, string> = {
 };
 
 export default function Enrollments() {
-  const { enrollments } = useApp();
+  const { enrollments } = useApi();
   const list = Object.values(enrollments).sort((a, b) => (a.enrolledAt < b.enrolledAt ? 1 : -1));
 
   return (

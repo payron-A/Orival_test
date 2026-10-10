@@ -18,7 +18,7 @@ export function MobileHeader({
   const { unreadNotificationCount } = useApp();
 
   return (
-    <div className={`lg:hidden sticky top-0 z-30 flex items-center gap-3 border-b 
+    <div className={`lg:hidden sticky top-0 z-50 flex items-center gap-3 border-b 
             border-base-border bg-base-bg/95 backdrop-blur px-4 ${back?"py-3":"py-1"} `}>
       {back ? (
         <button onClick={() => navigate(-1)} aria-label="Back" className="text-ink-primary">

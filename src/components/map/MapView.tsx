@@ -98,7 +98,7 @@ export function MapView({
   className = "",
 }: MapViewProps) {
   return (
-    <div className={`relative overflow-hidden rounded-2xl ${className}`}>
+    <div className={`relative overflow-hidden rounded-2xl z-30 ${className}`}>
       <MapContainer
         center={ALGERIA_CENTER}
         zoom={1}

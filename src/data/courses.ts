@@ -245,8 +245,7 @@ const cookingSections = sections(
 );
 
 // ___ Courses __________
-
-export const courses: Course[] = [
+export const defaultCourses: Course[] = [
   {
     id: "advanced-photography",
     title: "Advanced Photography",

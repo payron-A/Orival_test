@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { getCourseById, getProviderById } from "../data";
 import { ProgressBar } from "../components/ui/ProgressBar";
 import { MobileHeader } from "../components/layout/MobileHeader";
-import { useApp } from "../context/AppContext";
 import type { EnrollmentStatus } from "../types/user";
+import { useApi } from "../context/ApiContext";
 
 const tabs: { key: EnrollmentStatus; label: string }[] = [
   { key: "in-progress", label: "In Progress" },
@@ -13,7 +13,7 @@ const tabs: { key: EnrollmentStatus; label: string }[] = [
 ];
 
 export default function MyLearning() {
-  const { enrollments } = useApp();
+  const { enrollments } = useApi();
   const [tab, setTab] = useState<EnrollmentStatus>("in-progress");
 
   const list = useMemo(

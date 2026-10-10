@@ -1,16 +1,14 @@
 import { useMemo, useState } from "react";
-import { courses, providers } from "../data";
 import { CourseCard } from "../components/course/CourseCard";
-import { ProviderCard } from "../components/provider/ProviderCard";
 import { MobileHeader } from "../components/layout/MobileHeader";
-import { useApp } from "../context/AppContext";
+import { useApi } from "../context/ApiContext";
 
 export default function Saved() {
-  const { savedCourseIds, savedProviderIds } = useApp();
+
+  const { courses, savedCourseIds} = useApi();
   const [tab, setTab] = useState<"courses" | "providers">("courses");
 
-  const savedCourses = useMemo(() => courses.filter((c) => savedCourseIds.has(c.id)), [savedCourseIds]);
-  const savedProviders = useMemo(() => providers.filter((p) => savedProviderIds.has(p.id)), [savedProviderIds]);
+  const savedCourses = useMemo(() => courses.filter((c) => savedCourseIds.includes(c.id)), [savedCourseIds]);
 
   return (
     <div>
@@ -27,35 +25,17 @@ export default function Saved() {
           >
             Courses ({savedCourses.length})
           </button>
-          <button
-            onClick={() => setTab("providers")}
-            className={`border-b-2 px-3.5 py-2.5 text-sm font-medium transition-colors ${
-              tab === "providers" ? "border-orival text-orival" : "border-transparent text-ink-secondary hover:text-ink-primary"
-            }`}
-          >
-            Providers ({savedProviders.length})
-          </button>
         </div>
 
-        {tab === "courses" ? (
-          savedCourses.length === 0 ? (
+        {savedCourses.length === 0 ? 
+          (
             <p className="text-sm text-ink-muted py-10 text-center">No saved courses yet. Tap the bookmark icon on any course to save it here.</p>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3.5">
-              {savedCourses.map((c) => (
-                <CourseCard key={c.id} course={c} />
-              ))}
+              {savedCourses.map((c) => (<CourseCard key={c.id} course={c} />))}
             </div>
           )
-        ) : savedProviders.length === 0 ? (
-          <p className="text-sm text-ink-muted py-10 text-center">No saved providers yet.</p>
-        ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3.5">
-            {savedProviders.map((p) => (
-              <ProviderCard key={p.id} provider={p} />
-            ))}
-          </div>
-        )}
+        }
       </div>
     </div>
   );

@@ -7,8 +7,7 @@ import { SearchBar } from "../components/ui/SearchBar";
 import { MapView } from "../components/map/MapView";
 import { MapPreviewCard } from "../components/map/MapPreviewCard";
 import { MobileHeader } from "../components/layout/MobileHeader";
-import { currentUser } from "../data";
-import { useCourses } from "../context/CoursesContext";
+import { useApi } from "../context/ApiContext";
 
 
 // _____ Const Types of Filters:
@@ -18,14 +17,14 @@ const filters = ["All", "Near Me", "In-Person", "Online", "Hybrid"] as const;
 export default function Home() {
 
   const navigate = useNavigate();
-  const {localCourses} = useCourses();
+  const {courses,user} = useApi();
 
 // _____ FILTER _____
 // _____ Active filter Type:
   const [selectedId, setSelectedId] = useState<string | null>("");
   const [activeFilter, setActiveFilter] = useState<(typeof filters)[number]>("All");
 // _____ filter courses with locations by tabs:
-  const nearby = useMemo(() => localCourses?.filter((c) => c.mode !== "online" && c.location), []);
+  const nearby = useMemo(() => courses?.filter((c) => c.mode !== "online" && c.location), []);
   const filteredNearby = useMemo(() => {
     if (activeFilter === "All" || activeFilter === "Near Me") return nearby;
     if (activeFilter === "In-Person") return nearby.filter((c) => c.mode === "in-person");
@@ -33,8 +32,8 @@ export default function Home() {
     if (activeFilter === "Hybrid") return nearby.filter((c) => c.mode === "hybrid");
     return nearby;
   }, [activeFilter, nearby]);
-  const nearbyCourses = useMemo(() => localCourses?.filter((c) => c.mode !== "online").slice(0, 4), []);
-  const recommended = useMemo(() => localCourses?.slice(4, 10), []);
+  const nearbyCourses = useMemo(() => courses?.filter((c) => c.mode !== "online").slice(0, 4), []);
+  const recommended = useMemo(() => courses?.slice(4, 10), []);
   const selectedCourse = filteredNearby.find((c) => c.id === selectedId) ?? filteredNearby[0];
 
   const markers = filteredNearby
@@ -50,7 +49,7 @@ export default function Home() {
               <span className="hidden lg:inline text-orival"> today?</span>
             </h1>
             <p className="mt-1.5 text-sm text-ink-secondary max-w-lg">
-              Learn from the best instructors, near {currentUser.location.split(",")[0]} or online.
+              Learn from the best instructors, near {user? user.location.split(",")[0]:"you"} or online.
             </p>
             <div className="mt-4">
               <SearchBar
@@ -95,7 +94,7 @@ export default function Home() {
                         className={`flex items-center gap-2.5 rounded-lg border p-2 text-left transition-colors 
                           ${c.id === selectedCourse?.id ? "border-orival/50 bg-orival/5" : "border-base-border hover:border-base-border2"
                         }`}>
-                        <img src={c.thumbnailUrl} className="h-10 w-12 rounded-md object-cover" alt="" />
+                        <img src={c.thumbnailUrl} className="w-12 rounded-md object-cover aspect-video" alt="" />
                         <div className="min-w-0">
                           <p className="text-xs font-medium text-ink-primary line-clamp-1">{c.title}</p>
                           <p className="text-[11px] text-ink-muted">{c.distanceKm} km away</p>
@@ -113,7 +112,7 @@ export default function Home() {
                 Courses near you
               </h2>
               <button  onClick={() => navigate("/search?q=")} 
-                      className="flex items-center gap-2 text-xs font-medium text-orival hover:text-orival-bright">
+                  className="flex items-center gap-2 text-xs font-medium text-orival hover:text-orival-bright">
                 View all
                 <i className="fa-solid fa-arrow-right"></i>
               </button>

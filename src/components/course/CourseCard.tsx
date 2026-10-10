@@ -3,11 +3,11 @@ import type { Course } from "../../types/courses";
 import { Rating } from "../ui/Rating";
 import { ModeBadge } from "../ui/ModeBadge";
 import { getProviderById } from "../../data";
-import { useApp } from "../../context/AppContext";
+import { useApi } from "../../context/ApiContext";
 
 export function CourseCard({ course, compact }: { course: Course; compact?: boolean }) {
   const provider = getProviderById(course.providerId);
-  const { isSavedCourse, toggleSaveCourse } = useApp();
+  const { isSavedCourse, toggleSaveCourse } = useApi();
   const saved = isSavedCourse(course.id);
 
   return (
@@ -20,7 +20,7 @@ export function CourseCard({ course, compact }: { course: Course; compact?: bool
           src={course.thumbnailUrl}
           alt={course.title}
           loading="lazy"
-          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"/>
+          className="w-full object-cover transition-transform duration-300 group-hover:scale-105 aspect-video"/>
         <div className="absolute bottom-2.5 left-2.5">
           <ModeBadge mode={course.mode} />
         </div>

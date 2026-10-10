@@ -7,8 +7,8 @@ import { getProviderById } from "../../data";
 export function MapPreviewCard({ course, onClose }: { course: Course; onClose?: () => void }) {
   const provider = getProviderById(course.providerId);
   return (
-    <div className="flex items-stretch gap-3 rounded-xl2 border border-base-border bg-base-panel p-3 shadow-card">
-      <img src={course.thumbnailUrl} alt={course.title} className="h-20 w-24 shrink-0 rounded-lg object-cover" />
+    <div className="flex items-stretch gap-3 rounded-xl2 border border-base-border bg-base-panel p-3 shadow-card ">
+      <img src={course.thumbnailUrl} alt={course.title} className=" w-24  shrink-0 rounded-lg object-cover aspect-video" />
       <div className="min-w-0 flex-1">
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0">

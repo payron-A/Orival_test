@@ -5,7 +5,7 @@ import { Rating } from "../components/ui/Rating";
 import { ModeBadge } from "../components/ui/ModeBadge";
 import { MapView } from "../components/map/MapView";
 import { MobileHeader } from "../components/layout/MobileHeader";
-import { useApp } from "../context/AppContext";
+import { useApi } from "../context/ApiContext";
 
 const tabs = ["About", "Curriculum", "Reviews", "Location", "Instructor"] as const;
 
@@ -15,7 +15,7 @@ export default function CourseDetails() {
   const course = getCourseById(id ?? "");
   const [tab, setTab] = useState<(typeof tabs)[number]>("About");
   const [openSection, setOpenSection] = useState<string | null>(course?.sections[0]?.id ?? null);
-  const { isSavedCourse, toggleSaveCourse, isEnrolled, enroll } = useApp();
+  const { isSavedCourse, toggleSaveCourse, isEnrolled, enroll } = useApi();
 
   if (!course) {
     return (
@@ -44,12 +44,12 @@ export default function CourseDetails() {
       />
 
       <div className="lg:hidden">
-        <img src={course.thumbnailUrl} className="h-56 w-full object-cover" alt="" />
+        <img src={course.thumbnailUrl} className="w-full object-cover aspect-video" alt="" />
       </div>
 
       <div className="px-4 lg:px-8 pt-5 lg:pt-7 pb-24 lg:pb-10">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8">
-          <div className="min-w-0">
+          <div className="n">
             <div className="hidden lg:block mb-5">
               <button onClick={() => navigate(-1)} className="text-xs text-ink-muted hover:text-ink-secondary">
                 ← Back to results
@@ -57,7 +57,7 @@ export default function CourseDetails() {
             </div>
 
             <div className="hidden lg:block mb-5 overflow-hidden rounded-xl2">
-              <img src={course.thumbnailUrl} className="h-72 w-full object-cover" alt="" />
+              <img src={course.thumbnailUrl} className=" w-full object-cover aspect-video" alt="" />
             </div>
 
             <span className="inline-block mb-2 rounded-full bg-base-panel border border-base-border px-2.5 py-1 text-[11px] font-medium text-ink-secondary">
@@ -125,7 +125,7 @@ export default function CourseDetails() {
                         className="flex w-full items-center justify-between px-4 py-3 text-left"
                       >
                         <span className="text-sm font-semibold text-ink-primary">{s.title}</span>
-                        <i className="fa-solid fa-arrow-down text-ink-primary"></i>
+                        <i className="fa-solid fa-chevron-down text-ink-primary"></i>
                       </button>
                       {openSection === s.id && (
                         <div className="border-t border-base-border">
@@ -256,7 +256,8 @@ export default function CourseDetails() {
       </div>
 
       {/* mobile sticky CTA */}
-      <div className="lg:hidden fixed bottom-16 inset-x-0 z-30 border-t border-base-border bg-base-bg/95 backdrop-blur px-4 py-3 flex items-center gap-3">
+      <div className="lg:hidden fixed bottom-16 inset-x-0 z-30 border-t border-base-border 
+            bg-base-bg/95 backdrop-blur px-4 py-3 flex items-center gap-3">
         <div>
           <p className="text-[11px] text-ink-muted">Price</p>
           <p className="font-display text-lg font-bold text-orival">{course.priceDzd.toLocaleString()} DZD</p>

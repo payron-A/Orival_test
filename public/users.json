@@ -1,0 +1,39 @@
+[
+  {
+      "name": "Alex Martin",
+      "handle": "@alexmartin",
+      "email": "alex.martin@example.com",
+      "password": "34kIlb3lwi",
+      "avatarUrl": "/orival.svg",
+      "location": "US, New York",
+      "joined": "May 2024"
+  },
+  {
+      "name": "jhone Coleir",
+      "handle": "@jhone",
+      "email": "jhone.martin@example.com",
+      "password": "34092b3lwi",
+      "avatarUrl": "/orival.svg",
+      "location": "US, New Jersi",
+      "joined": "May 2024"
+  },
+  {
+      "name": "franch Martin",
+      "handle": "@alexmartin",
+      "email": "france@example.com",
+      "password": "33.0082.0i",
+      "avatarUrl": "/orival.svg",
+      "location": "France, Paris",
+      "joined": "May 2024"
+  },
+  {
+      "name": "Mohammed",
+      "handle": "@alexmartin",
+      "email": "mohammed@example.com",
+      "password": "30kll2;",
+      "avatarUrl": "/orival.svg",
+      "location": "Algeria, Algeria",
+      "joined": "May 2024"
+  }
+
+]

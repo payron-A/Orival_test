@@ -1,15 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { currentUser } from "../../data";
 import { useApp } from "../../context/AppContext";
-
+import { useApi } from "../../context/ApiContext";
 export function Topbar() {
   const navigate = useNavigate();
   const { unreadNotificationCount } = useApp();
+  const { user } = useApi();
   const [q, setQ] = useState("");
 
   return (
-    <header className="hidden lg:flex sticky top-0 z-30 items-center gap-4 border-b 
+    <header className="hidden lg:flex sticky top-0 z-50 items-center gap-4 border-b 
         border-base-border bg-base-bg/90 backdrop-blur px-8 py-3.5">
 
       <form
@@ -45,10 +45,10 @@ export function Topbar() {
           )}
         </button>
         <button
-            onClick={() => navigate("/profile")}
+            onClick={() => user? navigate("/profile") : navigate("/login")}
             className="flex items-center gap-2 rounded-full border border-base-border bg-base-panel py-1 pl-1 pr-2.5 hover:border-base-border2 transition-colors">
-          <img src={currentUser.avatarUrl} alt="" className="h-7 w-7 rounded-full object-cover" />
-          <span className="text-sm font-medium text-ink-primary">{currentUser.name}</span>
+          <img src={user?user.avatarUrl : "/orival.png"} alt="" className="h-7 w-7 rounded-full object-cover" />
+          <span className="text-sm font-medium text-ink-primary">{user?user.name : "P-1"}</span>
         </button>
       </div>
 

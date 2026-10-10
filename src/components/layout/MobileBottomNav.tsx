@@ -9,9 +9,9 @@ const items = [
 
 export function MobileBottomNav() {
   return (
-    <nav className="lg:hidden fixed bottom-0 inset-x-0 z-40 border-t border-base-border bg-base-bg/95 backdrop-blur pb-[env(safe-area-inset-bottom)]">
+    <nav className="lg:hidden fixed bottom-0 inset-x-0 z-50 border-t border-base-border bg-base-bg/95 backdrop-blur pb-[env(safe-area-inset-bottom)]">
       <div className="flex items-stretch justify-between px-1">
-        {items.map(({ to, label, end ,icon}) => (
+        {items.map(({ to, end ,icon}) => (
           <NavLink
             key={to}
             to={to}

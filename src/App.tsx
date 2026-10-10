@@ -19,12 +19,12 @@ const Notifications = lazy(() => import("./pages/Notifications"));
 const Profile = lazy(() => import("./pages/Profile"));
 const Settings = lazy(() => import("./pages/Settings"));
 const NotFound = lazy(() => import("./pages/NotFound"));
-
+const Login = lazy(()=>import("./pages/login"))
 
 function PageFallback() {
   return (
-    <div className="flex h-full items-center justify-center py-24">
-      <div className="h-7 w-7 animate-spin rounded-full border-2 border-base-border2 border-t-orival" />
+    <div className="flex h-full items-center justify-center py-24 bg-black">
+      <div className="h-7 w-7 animate-spin rounded-full border-2 border-base-border2 border-t-orival"/>
     </div>
   );
 }
@@ -51,7 +51,8 @@ export default function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="*" element={<NotFound />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/dashboard/:user" element={<Dashboard />} />
         </Route>
       </Routes>
     </Suspense>

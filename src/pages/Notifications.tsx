@@ -31,7 +31,7 @@ export default function Notifications() {
       <MobileHeader title="Notifications" />
       <div className="px-4 lg:px-8 pt-5 lg:pt-7 pb-6">
         <div className="flex items-center justify-between mb-4">
-          <h1 className="hidden lg:block font-display text-2xl font-bold">Notifications</h1>
+          <h1 className="hidden lg:block font-display text-2xl font-bold text-ink-primary">Notifications</h1>
           <button onClick={markAllNotificationsRead} className="ml-auto text-xs font-medium text-orival hover:text-orival-bright">
             Mark all as read
           </button>

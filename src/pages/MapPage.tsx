@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { courses } from "../data";
+import { useApi } from "../context/ApiContext";
 import { MapView } from "../components/map/MapView";
 import { MapPreviewCard } from "../components/map/MapPreviewCard";
 import { FilterChip } from "../components/ui/FilterChip";
@@ -23,6 +23,7 @@ const distanceOptions: {key:string,value:string}[] = [
 ]
 
 export default function MapPage() {
+  const { courses } = useApi();
   const [query, setQuery] = useState("");
   const [mode, setMode] = useState<"all" | LearningMode>("all");
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -58,8 +59,7 @@ export default function MapPage() {
       <SearchBar
         value={query}
         onChange={setQuery}
-        placeholder="Search a skill or course..."
-        withFilterButton/>
+        placeholder="Search a skill or course..."/>
       <div className="flex gap-2 overflow-x-auto no-scrollbar">
         {modeFilters.map((f) => (
           <FilterChip key={f.key} label={f.label} active={mode === f.key} onClick={() => setMode(f.key)} />
@@ -78,7 +78,7 @@ export default function MapPage() {
         <div className="relative h-[60vh] lg:h-full">
           <div className="absolute inset-0">
             <MapView markers={markers} selectedId={selected?.id} onSelect={setSelectedId} 
-                   className=" h-full w-full z-30" />
+                   className=" h-full w-full" />
           </div>
           {selected && (
             <div className="lg:hidden absolute z-40  bottom-3 w-full p-3 max-w-lg">
@@ -86,7 +86,7 @@ export default function MapPage() {
             </div>
           )}
         </div>
-        <div className="hidden lg:flex flex-col gap-3 overflow-y-auto scroll-thin">
+        <div className="hidden lg:flex flex-col gap-3 overflow-y-auto overflow-x-auto">
           <p className="text-xs text-ink-muted">{filtered.length} results</p>
           {selected && <MapPreviewCard course={selected} onClose={() => setSelectedId(null)} />}
           <div className="flex flex-col gap-2.5">
@@ -97,7 +97,7 @@ export default function MapPage() {
                   className={`flex items-center gap-2.5 rounded-xl2 border p-2.5 text-left transition-colors ${
                     c.id === selected?.id ? "border-orival/50 bg-orival/5" : "border-base-border bg-base-panel hover:border-base-border2"
                   }`}>
-                <img src={c.thumbnailUrl} className="h-14 w-16 rounded-lg object-cover" alt="" />
+                <img src={c.thumbnailUrl} className=" w-16 aspect-video rounded-lg object-cover" alt="" />
                 <div className="min-w-0">
                   <p className="text-sm font-medium text-ink-primary line-clamp-1">{c.title}</p>
                   <p className="text-xs text-ink-muted line-clamp-1">

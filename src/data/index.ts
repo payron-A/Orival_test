@@ -1,17 +1,20 @@
 export { categories } from "./categories";
 export { providers } from "./providers";
-export { courses } from "./courses";
-export { notifications, historyEntries, currentUser } from "./notifications";
+export { defaultCourses } from "./courses";
+export { notifications, historyEntries } from "./notifications";
 
 import { categories } from "./categories";
 import { providers } from "./providers";
-import { courses } from "./courses";
+import { useApi } from "../context/ApiContext";
 import type { Course } from "../types/courses";
 import type { Category } from "../types/category";
 import type { Provider } from "../types/provider";
-
+function Courses(){
+  const { courses } = useApi();
+  return courses
+}
 export function getCourseById(id: string): Course | undefined {
-  return courses.find((c) => c.id === id);
+  return Courses().find((c) => c.id === id);
 }
 export function getProviderById(id: string): Provider | undefined {
   return providers.find((p) => p.id === id);
@@ -20,8 +23,8 @@ export function getCategoryById(id: string): Category | undefined {
   return categories.find((c) => c.id === id);
 }
 export function getCoursesByProvider(providerId: string): Course[] {
-  return courses.filter((c) => c.providerId === providerId);
+  return Courses().filter((c) => c.providerId === providerId);
 }
 export function getCoursesByCategory(categoryId: string): Course[] {
-  return courses.filter((c) => c.categoryId === categoryId);
+  return Courses().filter((c) => c.categoryId === categoryId);
 }

@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 import { providers } from "../../data";
 import { useApp } from "../../context/AppContext";
 
+const hasUser = JSON.parse(localStorage.getItem("user"));
 const discoverLinks = [
   { to: "/", label: "Home", end: true, icon: "fa-solid fa-home" },
   { to: "/explore", label: "Explore", icon:"fa-solid fa-compass" },
@@ -20,7 +21,9 @@ const accountLinks = [
   { to: "/profile", label: "Profile", icon: "fa-solid fa-user"},
   { to: "/settings", label: "Settings", icon: "fa-solid fa-gear" },
 ];
-
+const loginLink = [
+  { to: "/login", label: "Login", icon: "fa-solid fa-arrow-right-to-bracket"}
+]
 function NavSection({ title, links }: { title: string; links: typeof discoverLinks }) {
   return (
     <div className="flex flex-col gap-0.5">
@@ -75,7 +78,7 @@ export function Sidebar() {
                 </NavLink>
               ))}
             </div>
-            <NavSection title="ACCOUNT" links={accountLinks} />
+            <NavSection title="ACCOUNT" links={hasUser? accountLinks : loginLink} />
         </nav>
         <div className="p-3">
             <div className="flex flex-col gap-2 rounded-xl2 border border-orival/25 bg-gradient-to-br 

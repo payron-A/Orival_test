@@ -1,4 +1,4 @@
-import type { HistoryEntry, User } from "../types/user";
+import type { HistoryEntry } from "../types/user";
 import type { AppNotification } from "../types/category";
 
 export const notifications: AppNotification[] = [
@@ -19,11 +19,4 @@ export const historyEntries: HistoryEntry[] = [
   { id: "h6", type: "course", refId: "english-conversation-skills", viewedAt: "3 days ago" },
 ];
 
-export const currentUser: User = {
-  name: "Alex Martin",
-  handle: "@alexmartin",
-  email: "alex.martin@example.com",
-  avatarUrl: "/orival.svg",
-  location: "Béchar, Algeria",
-  joined: "May 2024",
-};
+

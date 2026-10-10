@@ -1,13 +1,13 @@
 import { useMemo, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { getCourseById } from "../data";
-import { useApp } from "../context/AppContext";
+import { useApi } from "../context/ApiContext";
 
 export default function CoursePlayer() {
   const { id } = useParams();
   const navigate = useNavigate();
   const course = getCourseById(id ?? "");
-  const { enrollments, setLessonComplete } = useApp();
+  const { enrollments, setLessonComplete } = useApi();
   const [tab, setTab] = useState<"lessons" | "notes">("lessons");
   const [notes, setNotes] = useState("");
   const [showLessons, setShowLessons] = useState(false);
