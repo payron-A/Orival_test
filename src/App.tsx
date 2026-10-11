@@ -52,7 +52,7 @@ export default function App() {
           <Route path="/settings" element={<Settings />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/dashboard/:user" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Route>
       </Routes>
     </Suspense>

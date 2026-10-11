@@ -7,10 +7,10 @@ const sections = [
   { key: "notifications", label: "Notifications", icon:"fa-solid fa-bell"},
   { key: "privacy", label: "Privacy", icon:"fa-solid fa-lock"},
   { key: "payment", label: "Payment Methods", icon:"fa-solid fa-wallet"},
-  { key: "appearance", label: "Appearance", icon:"fa-solid fa-appearance"},
+  { key: "appearance", label: "Appearance", icon:"fa-solid fa-circle-half-stroke"},
   { key: "language", label: "Language", icon:"fa-solid fa-language"},
-  { key: "help", label: "Help & Support", icon:"fa-solid fa-help"},
-  { key: "about", label: "About ORIVAL", icon:"fa-solid fa-info"},
+  { key: "help", label: "Help & Support", icon:"fa-solid fa-circle-question"},
+  { key: "about", label: "About ORIVAL", icon:"fa-solid fa-circle-info"},
 ] as const;
 
 export default function Settings() {

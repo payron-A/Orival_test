@@ -9,11 +9,11 @@ import { ApiProvider } from './context/ApiContext';
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
-      <AppProvider>
-        <ApiProvider>
-            <App />
-        </ApiProvider>
-      </AppProvider>
+      <ApiProvider>
+        <AppProvider>
+          <App />
+        </AppProvider>
+      </ApiProvider>
     </BrowserRouter>
   </StrictMode>
 );

@@ -1,8 +1,9 @@
 import { NavLink } from "react-router-dom";
 import { providers } from "../../data";
 import { useApp } from "../../context/AppContext";
+import { useApi } from "../../context/ApiContext";
 
-const hasUser = JSON.parse(localStorage.getItem("user"));
+
 const discoverLinks = [
   { to: "/", label: "Home", end: true, icon: "fa-solid fa-home" },
   { to: "/explore", label: "Explore", icon:"fa-solid fa-compass" },
@@ -46,6 +47,7 @@ function NavSection({ title, links }: { title: string; links: typeof discoverLin
 }
 
 export function Sidebar() {
+  const { user } = useApi();
   const { followedProviderIds } = useApp();
   const followed = providers.filter((p) => followedProviderIds.has(p.id));
 
@@ -59,7 +61,7 @@ export function Sidebar() {
         <nav className="flex-1 overflow-y-auto scroll-thin px-3 pb-4">
             <NavSection title="DISCOVER" links={discoverLinks}/>
             <NavSection title="LIBRARY" links={libraryLinks} />
-            <div className="flex flex-col gap-0.5">
+            {user && <div className="flex flex-col gap-0.5">
               <div className="px-3 pb-1.5 pt-4 text-[11px] font-semibold tracking-wide text-ink-muted">
                 FOLLOWING
               </div>
@@ -77,10 +79,10 @@ export function Sidebar() {
                   {p.verified && <i className="fa-solid.fa-home"/>}
                 </NavLink>
               ))}
-            </div>
-            <NavSection title="ACCOUNT" links={hasUser? accountLinks : loginLink} />
+            </div>}
+            <NavSection title="ACCOUNT" links={user? accountLinks : loginLink} />
         </nav>
-        <div className="p-3">
+        {user && <div className="p-3">
             <div className="flex flex-col gap-2 rounded-xl2 border border-orival/25 bg-gradient-to-br 
                   from-orival/15 to-transparent p-3.5">
                 <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-orival/15 text-orival">
@@ -94,7 +96,7 @@ export function Sidebar() {
                   Upgrade to Pro
                 </button>
             </div>
-        </div>
+        </div>}
     </aside>
   );
 }

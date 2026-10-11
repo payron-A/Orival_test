@@ -4,36 +4,40 @@
       "handle": "@alexmartin",
       "email": "alex.martin@example.com",
       "password": "34kIlb3lwi",
-      "avatarUrl": "/orival.svg",
+      "avatarUrl": "/orival.png",
       "location": "US, New York",
-      "joined": "May 2024"
+      "joined": "May 2024",
+      "following?":["photography-academy","codepro-institute"]
   },
   {
       "name": "jhone Coleir",
       "handle": "@jhone",
       "email": "jhone.martin@example.com",
       "password": "34092b3lwi",
-      "avatarUrl": "/orival.svg",
+      "avatarUrl": "/orival.png",
       "location": "US, New Jersi",
-      "joined": "May 2024"
+      "joined": "May 2024",
+      "following": ["codepro-institute","design-studio","business-academy","photo-center"]
   },
   {
       "name": "franch Martin",
       "handle": "@alexmartin",
       "email": "france@example.com",
       "password": "33.0082.0i",
-      "avatarUrl": "/orival.svg",
+      "avatarUrl": "/orival.png",
       "location": "France, Paris",
-      "joined": "May 2024"
+      "joined": "May 2024",
+      "following":["photo-center","codepro-institute","photo-center"]
   },
   {
       "name": "Mohammed",
       "handle": "@alexmartin",
       "email": "mohammed@example.com",
       "password": "30kll2;",
-      "avatarUrl": "/orival.svg",
+      "avatarUrl": "/orival.png",
       "location": "Algeria, Algeria",
-      "joined": "May 2024"
+      "joined": "May 2024",
+      "following": ["photo-center","codepro-institute","design-studio"]
   }
 
 ]

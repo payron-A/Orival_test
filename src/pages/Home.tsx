@@ -49,7 +49,7 @@ export default function Home() {
               <span className="hidden lg:inline text-orival"> today?</span>
             </h1>
             <p className="mt-1.5 text-sm text-ink-secondary max-w-lg">
-              Learn from the best instructors, near {user? user.location.split(",")[0]:"you"} or online.
+              Learn from the best instructors, near {user?  user.location.split(",")[0]:"you"} or online.
             </p>
             <div className="mt-4">
               <SearchBar

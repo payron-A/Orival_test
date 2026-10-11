@@ -6,7 +6,8 @@ export interface User {
   avatarUrl: string;
   location: string;
   joined: string;
-  password?:string;
+  password:string;
+  following:string[];
 }
 
 //_____ENROLLMENTS_____

@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { useApi } from "./ApiContext";
 import { notifications as seedNotifications } from "../data";
 
@@ -17,8 +17,9 @@ const AppContext = createContext<AppState | null>(null);
 export function AppProvider({ children }: { children: ReactNode }) {
 
 //____Followres:
+  const { user , setUser} = useApi();
   const [followedProviderIds, setFollowedProviderIds] = useState<Set<string>>(new Set(
-    ["photography-academy", "codepro-institute", "english-center"])
+    user?.following)
   );
   const toggleFollowProvider = (providerId: string) =>
     setFollowedProviderIds((prev) => {
@@ -26,7 +27,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
       next.has(providerId) ? next.delete(providerId) : next.add(providerId);
       return next;
   });
-
+  useEffect(()=>{
+    if(user) return setUser({...user,following:[...followedProviderIds]});
+  },[followedProviderIds])
 //____Notification:
   const [notificationsRead, setNotificationsRead] = useState<Record<string, boolean>>(() =>
     Object.fromEntries(seedNotifications.map((n) => [n.id, n.read]))
@@ -60,7 +63,6 @@ export function useApp() {
   return ctx;
 }
 
-export function allCourseIds() {
-  const { courses } = useApi();
-  return courses.map((c) => c.id);
-}
+
+// ?????
+// Delete AllCourses Id
