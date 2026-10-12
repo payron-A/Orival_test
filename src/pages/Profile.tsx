@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
+import { useMemo } from "react";
 import { MobileHeader } from "../components/layout/MobileHeader";
 import { useApi } from "../context/ApiContext";
 
@@ -14,6 +15,9 @@ const menu = [
 export default function Profile() {
   const navigate = useNavigate();
   const { enrollments, user , setUser } = useApi();
+  const selectionList = useMemo(()=>
+    user?.providerId? menu : menu.filter(m => m.label !== "Dashboard"),[user]
+  );
   const list = Object.values(enrollments);
   const completed = list.filter((e) => e.status === "completed").length;
 
@@ -47,7 +51,7 @@ export default function Profile() {
         </div>
 
         <div className="mt-6 flex flex-col gap-1 max-w-md mx-auto lg:mx-0">
-          {menu.map(({ to, label,icon}) => (
+          {selectionList.map(({ to, label,icon}) => (
             <Link
               key={label}
               to={to}

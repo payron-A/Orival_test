@@ -40,7 +40,7 @@ export default function Provider() {
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1.5">
               <h1 className="font-display text-xl lg:text-2xl font-bold text-ink-primary">{provider.name}</h1>
-              {provider.verified && <i className="fa-solid fa-scroll text-ink-secondary"></i>}
+              {provider.verified && <i className="fa-solid fa-circle-check text-ink-primary"></i>}
             </div>
             <div className="mt-1.5 flex flex-wrap items-center gap-3">
               <Rating value={provider.rating} reviewCount={provider.reviewCount} size="md" />

@@ -34,10 +34,6 @@ export default function CoursePlayer() {
     if (target) setCurrentLessonId(target.id);
   };
 
-  const markComplete = () => {
-    setLessonComplete(course.id, currentLesson.id, flatLessons.length);
-    if (currentIndex < flatLessons.length - 1) goTo(currentIndex + 1);
-  };
 
   return (
     <div className="flex h-screen flex-col bg-base-bg">
@@ -56,45 +52,39 @@ export default function CoursePlayer() {
       </header>
 
       <div className="flex flex-1 min-h-0">
-        <div className="flex flex-1 flex-col min-w-0">
-            <div className="h-72 relative aspect-video bg-black">
+        <div className="flex flex-1 flex-col min-w-0 overflow-y-auto">
+            <div className="relative bg-black">
               <img src={course.thumbnailUrl} alt="" 
-                    className="h-full w-full object-cover opacity-70" />
+                    className="w-full object-cover opacity-70 aspect-video" />
               <button
-                onClick={markComplete}
-                className="absolute inset-0 flex items-center justify-center text-white/90 hover:text-white transition-colors"
+                className="absolute inset-0 flex items-center justify-center text-2xl text-white/90 hover:text-white transition-colors"
                 aria-label="Play"
               >
-                <i className="fa-solid fa-play"></i>
-              </button>
-            </div>
-
-            <div className="flex-1 overflow-y-auto scroll-thin px-5 py-4">
-              <p className="text-xs text-ink-muted">{currentLesson?.sectionTitle}</p>
-              <h2 className="mt-1 font-display text-ink-primary font-semibold">{currentLesson?.title}</h2>
-            </div>
-
-            <div className="flex items-center justify-between border-t border-base-border px-5 py-3.5">
-              <button
-                onClick={() => goTo(currentIndex - 1)}
-                disabled={currentIndex <= 0}
-                className="inline-flex items-center gap-1 text-sm font-medium text-ink-secondary disabled:opacity-30 hover:text-ink-primary"
-              >
-                <i className="fa-solid fa-arrow-left"></i> Previous
-              </button>
-              <button
-                onClick={markComplete}
-                className="rounded-lg bg-orival px-5 py-2 text-sm font-semibold text-black hover:bg-orival-bright transition-colors"
-              >
-                Mark complete & continue
+                <i className="fa-solid fa-play cursor-pointer z-50"></i>
               </button>
               <button
                 onClick={() => goTo(currentIndex + 1)}
                 disabled={currentIndex >= flatLessons.length - 1}
-                className="inline-flex items-center gap-1 text-sm font-medium text-ink-secondary disabled:opacity-30 hover:text-ink-primary"
+                className={`absolute inset-0 flex items-center justify-center text-xl text-white/90 hover:text-white transition-colors`}
+                  aria-label="forward step"
+                style={{marginLeft:"6rem"}}
               >
-                Next <i className="fa-solid fa-arrow-right"></i>
+                <i className="fa-solid fa-forward-step cursor-pointer z-50"></i>
               </button>
+              <button
+                onClick={() => goTo(currentIndex - 1)}
+                disabled={currentIndex <= 0}
+                className="absolute inset-0 flex items-center justify-center text-xl text-white/90 hover:text-white transition-colors"
+                  aria-label="forward step"
+                style={{marginRight:"6rem"}}
+              >
+                <i className="fa-solid fa-backward-step cursor-pointer z-50 "></i>
+              </button>
+            </div>
+
+            <div className="flex-1 px-5 py-4">
+              <p className="text-xs text-ink-muted">{currentLesson?.sectionTitle}</p>
+              <h2 className="mt-1 font-display text-ink-primary font-semibold">{currentLesson?.title}</h2>
             </div>
         </div>
 

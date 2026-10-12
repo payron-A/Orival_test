@@ -7,7 +7,8 @@
       "avatarUrl": "/orival.png",
       "location": "US, New York",
       "joined": "May 2024",
-      "following?":["photography-academy","codepro-institute"]
+      "following":["photography-academy","codepro-institute"],
+      "providerId":"design-studio"
   },
   {
       "name": "jhone Coleir",
@@ -17,7 +18,8 @@
       "avatarUrl": "/orival.png",
       "location": "US, New Jersi",
       "joined": "May 2024",
-      "following": ["codepro-institute","design-studio","business-academy","photo-center"]
+      "following": ["codepro-institute","design-studio","business-academy","photo-center"],
+      "providerId":"business-academy"
   },
   {
       "name": "franch Martin",
@@ -37,7 +39,8 @@
       "avatarUrl": "/orival.png",
       "location": "Algeria, Algeria",
       "joined": "May 2024",
-      "following": ["photo-center","codepro-institute","design-studio"]
+      "following": ["photo-center","codepro-institute","design-studio"],
+      "providerId":"photo-center"
   }
 
 ]

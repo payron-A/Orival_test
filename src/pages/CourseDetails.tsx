@@ -66,7 +66,7 @@ export default function CourseDetails() {
             <h1 className="font-display text-2xl lg:text-3xl font-bold leading-tight text-ink-primary">{course.title}</h1>
             <Link to={`/provider/${provider?.id}`} className="mt-1.5 inline-flex items-center gap-1 text-sm text-ink-secondary hover:text-ink-primary">
               {provider?.name}
-              {provider?.verified && <i className="fa-solid fa-scroll"/>}
+              {provider.verified && <i className="fa-solid fa-circle-check text-ink-primary"></i>}
             </Link>
 
             <div className="mt-3 flex flex-wrap items-center gap-3">
@@ -213,7 +213,7 @@ export default function CourseDetails() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1">
                       <span className="font-semibold text-ink-primary">{provider.name}</span>
-                      {provider.verified && <i className="fa-solid fa-scroll text-ink-secondary"/>}
+                      {provider.verified && <i className="fa-solid fa-circle-check text-ink-primary"></i>}
                     </div>
                     <Rating value={provider.rating} reviewCount={provider.reviewCount} />
                     <p className="text-xs text-ink-muted mt-1 line-clamp-2">{provider.about}</p>
@@ -227,7 +227,7 @@ export default function CourseDetails() {
             <div className="sticky top-20 flex flex-col gap-4 rounded-xl2 border border-base-border bg-base-panel p-5">
               <span className="font-display text-2xl font-bold text-orival">{course.priceDzd.toLocaleString()} DZD</span>
               <button
-                onClick={() => enroll(course.id)}
+                onClick={() => enrolled? navigate(`/course/${course.id}/learn`) : enroll(course.id)}
                 className="w-full rounded-lg bg-orival py-2.5 text-sm font-semibold text-black hover:bg-orival-bright transition-colors"
               >
                 {enrolled ? "Continue Learning" : "Enroll Now"}
@@ -263,7 +263,7 @@ export default function CourseDetails() {
           <p className="font-display text-lg font-bold text-orival">{course.priceDzd.toLocaleString()} DZD</p>
         </div>
         <button
-          onClick={() => enroll(course.id)}
+          onClick={() => enrolled? navigate(`/course/${course.id}/learn`) : enroll(course.id)}
           className="flex-1 rounded-lg bg-orival py-2.5 text-sm font-semibold text-black"
         >
           {enrolled ? "Continue Learning" : "Enroll Now"}

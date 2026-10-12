@@ -8,6 +8,7 @@ export interface User {
   joined: string;
   password:string;
   following:string[];
+  providerId?:string;
 }
 
 //_____ENROLLMENTS_____
