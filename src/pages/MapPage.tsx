@@ -34,7 +34,7 @@ export default function MapPage() {
     let result = locatable.filter((c) => {
       if (mode !== "all" && c.mode !== mode) return false;
       if (query.trim() && !c.title.toLowerCase().includes(query.toLowerCase())) return false;
-      if (maxDistanceKm && c.distanceKm > Number(maxDistanceKm.split(" ")[1])) return false;
+      if (maxDistanceKm && Number(c.distanceKm) > Number(maxDistanceKm.split(" ")[1])) return false;
       return true;
     });
     return result;

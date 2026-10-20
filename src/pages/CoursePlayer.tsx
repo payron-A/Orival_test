@@ -7,7 +7,7 @@ export default function CoursePlayer() {
   const { id } = useParams();
   const navigate = useNavigate();
   const course = getCourseById(id ?? "");
-  const { enrollments, setLessonComplete } = useApi();
+  const { enrollments } = useApi();
   const [tab, setTab] = useState<"lessons" | "notes">("lessons");
   const [notes, setNotes] = useState("");
   const [showLessons, setShowLessons] = useState(false);

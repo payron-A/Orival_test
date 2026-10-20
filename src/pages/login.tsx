@@ -24,7 +24,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  function handleSubmit(e) {
+  function handleSubmit(e:React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!email.trim() || !password.trim()) {
       return setError("Enter your email and password to continue.");
@@ -51,8 +51,10 @@ export default function Login() {
       const data = await rs.json();
       return data;
     }
-    catch(error){
-      setError(error.message);
+    catch(error:unknown){
+      if(error instanceof Error){
+        setError(error.message);
+      }
     }
     finally{
       setLoading(false);

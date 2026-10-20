@@ -26,10 +26,10 @@ export default function Profile() {
       <MobileHeader title="Profile" />
       <div className="px-4 lg:px-8 pt-5 lg:pt-7 pb-8">
         <div className="flex flex-col items-center text-center gap-2 lg:flex-row lg:text-left lg:items-center lg:gap-4">
-          <img src={user.avatarUrl} className="h-20 w-20 rounded-full object-cover" alt="" />
+          <img src={user?.avatarUrl} className="h-20 w-20 rounded-full object-cover" alt="" />
           <div>
-            <h1 className="font-display text-xl font-bold text-ink-primary">{user.name}</h1>
-            <p className="text-sm text-ink-muted">{user.handle}</p>
+            <h1 className="font-display text-xl font-bold text-ink-primary">{user?.name}</h1>
+            <p className="text-sm text-ink-muted">{user?.handle}</p>
           </div>
         </div>
 
@@ -45,8 +45,8 @@ export default function Profile() {
             Passionate about learning new skills and sharing knowledge.
           </p>
           <div className="mt-3 flex justify-between text-xs text-ink-muted">
-            <span>Location: {user.location}</span>
-            <span>Joined {user.joined}</span>
+            <span>Location: {user?.location}</span>
+            <span>Joined {user?.joined}</span>
           </div>
         </div>
 

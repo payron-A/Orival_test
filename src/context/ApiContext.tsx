@@ -13,8 +13,8 @@ type ApiState = {
     setLessonComplete: (courseId: string, lessonId: string, totalLessons: number) => void,
     isSavedCourse: (id: string) => boolean,
     isEnrolled: (id: string) => boolean,
-    user: User,
-    setUser: React.Dispatch<React.SetStateAction<User>>,
+    user: User | null,
+    setUser: React.Dispatch<React.SetStateAction<User | null>>,
 }
 const apiContext = createContext<ApiState | null>(null);
 export function ApiProvider({children}:{children:ReactNode}){
@@ -99,19 +99,23 @@ export function useApi(){
     if (!ctx) throw new Error("useApi must be used within ApiProvider");
     return ctx;
 }
-function save(key:string,value:unknown[] | Record<string, Enrollment> | User){
+function save(key:string,value:unknown[] | Record<string, Enrollment> | User | null){
   try{
     localStorage.setItem(key,JSON.stringify(value))
-  }catch(err){
-    console.error(err.message)
+  }catch(err:unknown){
+    if(err instanceof Error){
+      console.log(err.message);
+    }
   }
 }
-function load(key:string,seedData:unknown[] | Record<string, Enrollment> | User){
+function load(key:string,seedData:unknown[] | Record<string, Enrollment> | User | null){
   try{
     const saved = localStorage.getItem(key);
     if(saved) return JSON.parse(saved);
-  }catch(err){
-    console.error(err.message)
+  }catch(err:unknown){
+    if(err instanceof Error){
+      console.log(err.message)
+    }
   }
   return seedData
 }

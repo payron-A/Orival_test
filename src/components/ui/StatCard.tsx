@@ -6,7 +6,7 @@ export function StatCard({
   accent = "#FF7A26",
 }: {
   label: string;
-  value: string;
+  value: string | undefined;
   icon: string;
   trend?: { value: string; positive?: boolean };
   accent?: string;

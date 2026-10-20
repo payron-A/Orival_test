@@ -66,7 +66,7 @@ export default function CourseDetails() {
             <h1 className="font-display text-2xl lg:text-3xl font-bold leading-tight text-ink-primary">{course.title}</h1>
             <Link to={`/provider/${provider?.id}`} className="mt-1.5 inline-flex items-center gap-1 text-sm text-ink-secondary hover:text-ink-primary">
               {provider?.name}
-              {provider.verified && <i className="fa-solid fa-circle-check text-ink-primary"></i>}
+              {provider?.verified && <i className="fa-solid fa-circle-check text-ink-primary"></i>}
             </Link>
 
             <div className="mt-3 flex flex-wrap items-center gap-3">
@@ -213,7 +213,7 @@ export default function CourseDetails() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1">
                       <span className="font-semibold text-ink-primary">{provider.name}</span>
-                      {provider.verified && <i className="fa-solid fa-circle-check text-ink-primary"></i>}
+                      {provider?.verified && <i className="fa-solid fa-circle-check text-ink-primary"></i>}
                     </div>
                     <Rating value={provider.rating} reviewCount={provider.reviewCount} />
                     <p className="text-xs text-ink-muted mt-1 line-clamp-2">{provider.about}</p>

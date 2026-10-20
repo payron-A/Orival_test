@@ -23,9 +23,9 @@ const monthlyEnrollments = [
 
 export default function Dashboard() {
   const { user } = useApi();
-  const providerAccount = useMemo(()=> getProviderById(user.providerId),[user]);
+  const providerAccount = useMemo(()=> getProviderById(user?.providerId),[user]);
   const navigate = useNavigate();
-  const courses = useMemo(() => getCoursesByProvider(providerAccount.id), []);
+  const courses = useMemo(() => getCoursesByProvider(providerAccount?.id), []);
 
   if (!user) return null;
 
@@ -39,17 +39,17 @@ export default function Dashboard() {
 
       <div className="px-4 lg:px-8 pt-5 lg:pt-7 pb-10">
         <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
-          <img src={providerAccount.avatarUrl} className="h-14 w-14 rounded-full object-cover" alt="" />
+          <img src={providerAccount?.avatarUrl} className="h-14 w-14 rounded-full object-cover" alt="" />
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1.5">
-              <h1 className="font-display text-xl lg:text-2xl font-bold text-ink-primary">{providerAccount.name}</h1>
-              {providerAccount.verified && <i className="fa-solid fa-circle-check text-ink-primary"></i>}
+              <h1 className="font-display text-xl lg:text-2xl font-bold text-ink-primary">{providerAccount?.name}</h1>
+              {providerAccount?.verified && <i className="fa-solid fa-circle-check text-ink-primary"></i>}
             </div>
             <p className="text-sm text-ink-secondary mt-0.5">Provider dashboard · last 6 months</p>
           </div>
           <div className="flex gap-2">
             <Link
-              to={`/provider/${providerAccount.id}`}
+              to={`/provider/${providerAccount?.id}`}
               className="rounded-lg border border-base-border px-3.5 py-2 text-sm font-medium text-ink-secondary hover:text-ink-primary hover:border-base-border2 transition-colors"
             >
               View public page
@@ -62,7 +62,7 @@ export default function Dashboard() {
 
         {/* KPI cards — reuses StatCard */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 mb-6">
-          <StatCard label="Total students" value={String(providerAccount.followerCount)} 
+          <StatCard label="Total students" value={String(providerAccount?.followerCount)} 
                     icon={"fa-solid fa-users"} trend={{ value: "+12%" }} 
                     accent="#3E8FFF" />
           <StatCard label="Active courses" value={String(courses.length)} 
@@ -71,7 +71,7 @@ export default function Dashboard() {
           <StatCard label="Revenue (all time)" value={`${(totalRevenue / 1000).toFixed(0)} DZD`} 
                     icon={"fa-solid fa-wallet"} trend={{ value: "+8%" }} 
                     accent="#33C46A" />
-          <StatCard label="Average rating" value={providerAccount.rating.toFixed(1)} 
+          <StatCard label="Average rating" value={providerAccount?.rating.toFixed(1)} 
                     icon={"fa-solid fa-star"} 
                     accent="#FF7A26" />
         </div>
@@ -93,7 +93,7 @@ export default function Dashboard() {
             <section>
               <div className="flex items-center justify-between mb-3">
                 <h2 className="font-display text-lg font-semibold text-ink-primary">Your courses</h2>
-                <button onClick={() => navigate(`/provider/${providerAccount.id}`)} className="text-xs font-medium text-orival hover:text-orival-bright">
+                <button onClick={() => navigate(`/provider/${providerAccount?.id}`)} className="text-xs font-medium text-orival hover:text-orival-bright">
                   Manage all
                 </button>
               </div>

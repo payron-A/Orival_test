@@ -16,7 +16,7 @@ const sections = [
 export default function Settings() {
   const {user} = useApi();
   const [active, setActive] = useState<(typeof sections)[number]["key"]>("account");
-  const [name, setName] = useState(user.name);
+  const [name, setName] = useState(user?.name);
 
   return (
     <div>
@@ -59,7 +59,7 @@ export default function Settings() {
               <div className="max-w-md flex flex-col gap-4">
                 <h2 className="font-display text-lg font-semibold text-ink-primary">Account Settings</h2>
                 <Field label="Full Name" value={name} onChange={setName} action="Save" />
-                <Field label="Email" value={user.email} readOnly />
+                <Field label="Email" value={user?.email} readOnly />
                 <Field label="Password" value="••••••••••••" type="password" readOnly />
               </div>
             )}
@@ -110,7 +110,7 @@ function Field({
   type = "text",
 }: {
   label: string;
-  value: string;
+  value: string | undefined;
   onChange?: (v: string) => void;
   action?: string;
   readOnly?: boolean;

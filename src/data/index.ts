@@ -16,13 +16,13 @@ function Courses(){
 export function getCourseById(id: string): Course | undefined {
   return Courses().find((c) => c.id === id);
 }
-export function getProviderById(id: string): Provider | undefined {
+export function getProviderById(id: string | undefined): Provider | undefined {
   return providers.find((p) => p.id === id);
 }
 export function getCategoryById(id: string): Category | undefined {
   return categories.find((c) => c.id === id);
 }
-export function getCoursesByProvider(providerId: string): Course[] {
+export function getCoursesByProvider(providerId: string | undefined): Course[] {
   return Courses().filter((c) => c.providerId === providerId);
 }
 export function getCoursesByCategory(categoryId: string): Course[] {
