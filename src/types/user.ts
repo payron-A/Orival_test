@@ -5,9 +5,9 @@ export interface User {
   email: string;
   avatarUrl: string;
   location: string;
-  joined: string;
-  password:string;
-  following:string[];
+  joinedAt: string;
+  password?:string;
+  following?:string[];
   providerId?:string;
 }
 

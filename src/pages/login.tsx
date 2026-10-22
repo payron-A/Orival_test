@@ -2,8 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useApi } from "../context/ApiContext";
 import "../styles/login.css";
-import type { User } from "../types/user";
-
+import { api } from "../lib/api";
 const FLOATING_PINS = [
   { left: "12%", size: 16, delay: "0s", duration: "7s" },
   { left: "28%", size: 22, delay: "1.4s", duration: "8.5s" },
@@ -13,9 +12,7 @@ const FLOATING_PINS = [
 ];
 
 export default function Login() {
-  
   const { setUser } = useApi();
-  const [ users , setUsers ] = useState<User[] | null>(null);
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,46 +21,78 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  function handleSubmit(e:React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    if (!email.trim() || !password.trim()) {
-      return setError("Enter your email and password to continue.");
-    }
-    loadUsers();
-    if(!users)return;
-    const currentUser = users?.find(u => u.email === email && u.password === password);
-    if(!currentUser) return setError("wrong email or password");
-    setError(null);
-    setUser(currentUser);
-    // Simulated auth — wire this up to a real endpoint when the backend is ready.
-    setTimeout(() => {
-      setLoading(false);
-      navigate("/");
-    }, 900);
-  }
+  // function handleSubmit(e:React.FormEvent<HTMLFormElement>) {
+  //   e.preventDefault();
+  //   if (!email.trim() || !password.trim()) {
+  //     return setError("Enter your email and password to continue.");
+  //   }
+  //   loadUsers();
+  //   if(!users)return;
+  //   const currentUser = users?.find(u => u.email === email && u.password === password);
+  //   if(!currentUser) return setError("wrong email or password");
+  //   setError(null);
+  //   setUser(currentUser);
+  //   // Simulated auth — wire this up to a real endpoint when the backend is ready.
+  //   setTimeout(() => {
+  //     setLoading(false);
+  //     navigate("/");
+  //   }, 900);
+  // }
 
   // Users
-  async function getUsers(){
-    try{
-      setLoading(true);
-      const rs = await fetch("users.json");
-      if(!rs.ok) return setError("Field fetching data, Check your Network");
-      const data = await rs.json();
-      return data;
-    }
-    catch(error:unknown){
-      if(error instanceof Error){
-        setError(error.message);
-      }
-    }
-    finally{
-      setLoading(false);
-    }
+  // async function getUsers(){
+  //   try{
+  //     setLoading(true);
+  //     const rs = await fetch("users.json");
+  //     if(!rs.ok) return setError("Field fetching data, Check your Network");
+  //     const data = await rs.json();
+  //     return data;
+  //   }
+  //   catch(error:unknown){
+  //     if(error instanceof Error){
+  //       setError(error.message);
+  //     }
+  //   }
+  //   finally{
+  //     setLoading(false);
+  //   }
+  // }
+  // async function loadUsers(){
+  //   const data = await getUsers();
+  //   return setUsers(data);
+  // }
+
+  
+
+async function handleSubmit(e: React.FormEvent) {
+  e.preventDefault();
+  if (!email.trim() || !password.trim()) {
+    return setError("Enter your email and password to continue.");
   }
-  async function loadUsers(){
-    const data = await getUsers();
-    return setUsers(data);
+  setError(null);
+  setLoading(true);
+  try {
+    const { token, user } = await api<{ token: string; user: any }>("/auth/login", {
+      method: "POST",
+      body: JSON.stringify({ email, password }),
+    });
+    localStorage.setItem("token", token);
+    setUser({
+      name: user.name,
+      handle: "@" + user.email.split("@")[0],
+      email: user.email,
+      avatarUrl: user.avatarUrl ?? "https://ui-avatars.com/api/?name=" + encodeURIComponent(user.name) + "&background=FF7A26&color=0B0C0E",
+      location: user.location ?? "",
+      joinedAt:"",
+    });
+    navigate("/");
+  } catch (err) {
+    setError(err instanceof Error ? err.message : "Login failed");
+  } finally {
+    setLoading(false);
   }
+}
+
   return (
     <div className="login-page">
       {/* Left: brand / location-driven hero */}
