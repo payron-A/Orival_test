@@ -1,71 +1,36 @@
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { useApi } from "./ApiContext";
-import { notifications as seedNotifications } from "../data";
+import { useCallback, useMemo, useState, type ReactNode } from "react";
+import { AppContext, type AppState } from "./app-context";
+import { notifications as seed } from "../data";
 import { api } from "../lib/api";
-interface AppState {
-  followedProviderIds: Set<string>;
-  unreadNotificationCount: number;
-  notificationsRead: Record<string, boolean>;
-  toggleFollowProvider: (providerId: string) => void;
-  markNotificationRead: (id: string) => void;
-  markAllNotificationsRead: () => void;
-  isFollowing: (id: string) => boolean;
-}
+import { loadJSON, saveJSON } from "../lib/storage";
 
-const AppContext = createContext<AppState | null>(null);
+const FOLLOW_KEY = "orival.following.v1";
+const isStringArray = (v: unknown): v is string[] => Array.isArray(v) && v.every((x) => typeof x === "string");
 
 export function AppProvider({ children }: { children: ReactNode }) {
-
-//____Followres:
-  const { user , setUser} = useApi();
-  const [followedProviderIds, setFollowedProviderIds] = useState<Set<string>>(new Set(
-    user?.following)
-  );
-  const toggleFollowProvider = async (providerId: string) => {
-    const isFollowing = followedProviderIds.has(providerId);
-    await api(`/providers/${providerId}/follow`, { method: isFollowing ? "DELETE" : "POST" });
-    setFollowedProviderIds((prev) => {
-      const next = new Set(prev);
-      isFollowing ? next.delete(providerId) : next.add(providerId);
-      return next;
-    });
-  };
-  useEffect(()=>{
-    if(user) return setUser({...user,following:[...followedProviderIds]});
-  },[followedProviderIds])
-//____Notification:
-  const [notificationsRead, setNotificationsRead] = useState<Record<string, boolean>>(() =>
-    Object.fromEntries(seedNotifications.map((n) => [n.id, n.read]))
+  const [followed, setFollowed] = useState<string[]>(() => loadJSON<string[]>(FOLLOW_KEY, [], isStringArray));
+  const toggleFollow = useCallback(
+    (id: string) => {
+      const was = followed.includes(id);
+      const next = was ? followed.filter((x) => x !== id) : [...followed, id];
+      setFollowed(next);
+      saveJSON(FOLLOW_KEY, next);
+      if (localStorage.getItem("token")) api(`/providers/${id}/follow`, { method: was ? "DELETE" : "POST" }).catch(() => undefined);
+    },
+    [followed]
   );
 
-  const markNotificationRead = (id: string) => setNotificationsRead((prev) => ({ ...prev, [id]: true }));
-  const markAllNotificationsRead = () =>
-    setNotificationsRead(Object.fromEntries(seedNotifications.map((n) => [n.id, true])));
-
-  const unreadNotificationCount = useMemo(
-    () => seedNotifications.filter((n) => !notificationsRead[n.id]).length,
-    [notificationsRead]
-  );
+  const [read, setRead] = useState<Record<string, boolean>>(() => Object.fromEntries(seed.map((n) => [n.id, n.read])));
+  const unreadCount = useMemo(() => seed.filter((n) => !read[n.id]).length, [read]);
 
   const value: AppState = {
-    followedProviderIds,
-    unreadNotificationCount,
-    notificationsRead,
-    toggleFollowProvider,
-    markNotificationRead,
-    markAllNotificationsRead,
-    isFollowing: (id) => followedProviderIds.has(id),
+    followedIds: new Set(followed),
+    isFollowing: (id) => followed.includes(id),
+    toggleFollow,
+    unreadCount,
+    notificationsRead: read,
+    markRead: (id) => setRead((p) => ({ ...p, [id]: true })),
+    markAllRead: () => setRead(Object.fromEntries(seed.map((n) => [n.id, true]))),
   };
-
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }
-
-export function useApp() {
-  const ctx = useContext(AppContext);
-  if (!ctx) throw new Error("useApp must be used within AppProvider");
-  return ctx;
-}
-
-
-// ?????
-// Delete AllCourses Id

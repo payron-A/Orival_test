@@ -98,7 +98,7 @@ export function MapView({
   className = "",
 }: MapViewProps) {
   return (
-    <div className={`relative overflow-hidden rounded-2xl z-30 ${className}`}>
+    <div className={`relative z-0 h-full w-full ${className}`}>
       <MapContainer
         center={ALGERIA_CENTER}
         zoom={1}
@@ -107,7 +107,7 @@ export function MapView({
         maxBounds={ALGERIA_BOUNDS}
         maxBoundsViscosity={1}
         scrollWheelZoom={true}
-        className="h-full w-full overflow-hidden rounded-lg"
+        className="h-full w-full"
       >
         {/* Real OpenStreetMap map */}
         <TileLayer

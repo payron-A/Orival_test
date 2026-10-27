@@ -1,138 +1,56 @@
-import { useState } from "react";
-import { MobileHeader } from "../components/layout/MobileHeader";
-import { useApi } from "../context/ApiContext";
+import { useState, type FormEvent } from "react";
+import { useApi } from "../context/api-context";
+import { useI18n } from "../i18n/i18n-context";
+import { PageHead } from "../components/common/PageHead";
 
-const sections = [
-  { key: "account", label: "Account", icon:"fa-solid fa-user"},
-  { key: "notifications", label: "Notifications", icon:"fa-solid fa-bell"},
-  { key: "privacy", label: "Privacy", icon:"fa-solid fa-lock"},
-  { key: "payment", label: "Payment Methods", icon:"fa-solid fa-wallet"},
-  { key: "appearance", label: "Appearance", icon:"fa-solid fa-circle-half-stroke"},
-  { key: "language", label: "Language", icon:"fa-solid fa-language"},
-  { key: "help", label: "Help & Support", icon:"fa-solid fa-circle-question"},
-  { key: "about", label: "About ORIVAL", icon:"fa-solid fa-circle-info"},
-] as const;
+type Tab = "account" | "language" | "about";
 
 export default function Settings() {
-  const {user} = useApi();
-  const [active, setActive] = useState<(typeof sections)[number]["key"]>("account");
-  const [name, setName] = useState(user?.name);
+  const { user, updateProfile } = useApi();
+  const { t, lang, setLang } = useI18n();
+  const [tab, setTab] = useState<Tab>(user ? "account" : "language");
+  const [name, setName] = useState(user?.name ?? "");
+  const [location, setLocation] = useState(user?.location ?? "");
+  const [saved, setSaved] = useState(false);
+  const tabs: Tab[] = user ? ["account", "language", "about"] : ["language", "about"];
+
+  const submit = (e: FormEvent) => {
+    e.preventDefault();
+    if (!name.trim()) return;
+    updateProfile({ name: name.trim(), location: location.trim() });
+    setSaved(true);
+  };
 
   return (
-    <div>
-      <MobileHeader back title="Settings" />
-      <div className="px-4 lg:px-8 pt-5 lg:pt-7 pb-8">
-        <h1 className="hidden lg:block font-display text-2xl font-bold mb-5 text-ink-primary">Settings</h1>
-
-        <div className="grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-6">
-          <nav className="hidden lg:flex flex-col gap-0.5 rounded-xl2 border border-base-border bg-base-panel p-2">
-            {sections.map(({ key, label, icon}) => (
-              <button
-                key={key}
-                onClick={() => setActive(key)}
-                className={`flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium text-left transition-colors ${
-                  active === key ? "bg-orival/10 text-orival" : "text-ink-secondary hover:bg-base-panel2 hover:text-ink-primary"
-                }`}
-              >
-                <i className={icon}></i>
-                {label}
-              </button>
-            ))}
-          </nav>
-
-          <div className="lg:hidden flex flex-col gap-1">
-            {sections.map(({ key, label,icon}) => (
-              <button
-                key={key}
-                onClick={() => setActive(key)}
-                className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-ink-secondary hover:bg-base-panel2 hover:text-ink-primary transition-colors text-left"
-              >
-                <i className={icon}></i>
-                <span className="flex-1">{label}</span>
-                <i className="fa-solid fa-arrow-right"></i>
-              </button>
-            ))}
-          </div>
-
-          <div className="hidden lg:block rounded-xl2 border border-base-border bg-base-panel p-6">
-            {active === "account" && (
-              <div className="max-w-md flex flex-col gap-4">
-                <h2 className="font-display text-lg font-semibold text-ink-primary">Account Settings</h2>
-                <Field label="Full Name" value={name} onChange={setName} action="Save" />
-                <Field label="Email" value={user?.email} readOnly />
-                <Field label="Password" value="••••••••••••" type="password" readOnly />
-              </div>
-            )}
-            {active !== "account" && (
-              <div className="max-w-md">
-                <h2 className="font-display text-lg font-semibold capitalize mb-2 text-ink-primary">
-                  {sections.find((s) => s.key === active)?.label}
-                </h2>
-                <p className="text-sm text-ink-secondary">
-                  {placeholderCopy(active)}
-                </p>
-              </div>
-            )}
-          </div>
+    <div className="mx-auto w-full max-w-page px-4 sm:px-6 animate-page-in pb-24 pt-8 min-[960px]:pb-18 min-[960px]:pt-12">
+      <PageHead eyebrow={t("nav.settings")} title={t("settings.title")} />
+      <div className="grid gap-5 min-[821px]:grid-cols-[220px_1fr] min-[821px]:gap-12">
+        <div className="grid content-start gap-0.5 max-[820px]:flex max-[820px]:overflow-x-auto" role="tablist" aria-orientation="vertical">
+          {tabs.map((k) => (
+            <button key={k} role="tab" className="border-0 border-s-2 border-line bg-transparent px-4 py-3 text-start text-sm font-medium text-soft aria-[current=true]:border-orange-500 aria-[current=true]:font-bold aria-[current=true]:text-ink max-[820px]:whitespace-nowrap max-[820px]:border-s-0 max-[820px]:border-b-2 max-[820px]:aria-[current=true]:border-b-orange-500" aria-selected={tab === k} aria-current={tab === k ? "true" : undefined} onClick={() => { setTab(k); setSaved(false); }}>{t(`settings.${k}`)}</button>
+          ))}
         </div>
+        <section className="space-y-4" style={{ maxWidth: 520 }} role="tabpanel">
+          {tab === "account" && user && (
+            <form className="space-y-4" onSubmit={submit}>
+              <div className="flex flex-col gap-1"><label className="text-sm font-semibold" htmlFor="s-name">{t("settings.name")}</label><input id="s-name" className="min-h-11 w-full rounded border border-muted bg-white px-3 py-2 text-ink transition focus:border-ink focus:outline-none focus:ring-[3px] focus:ring-orange-200 aria-[invalid=true]:border-danger" value={name} onChange={(e) => { setName(e.target.value); setSaved(false); }} aria-invalid={!name.trim()} /></div>
+              <div className="flex flex-col gap-1"><label className="text-sm font-semibold" htmlFor="s-loc">{t("settings.location")}</label><input id="s-loc" className="min-h-11 w-full rounded border border-muted bg-white px-3 py-2 text-ink transition focus:border-ink focus:outline-none focus:ring-[3px] focus:ring-orange-200 aria-[invalid=true]:border-danger" value={location} onChange={(e) => { setLocation(e.target.value); setSaved(false); }} /></div>
+              <div className="flex flex-col gap-1"><label className="text-sm font-semibold" htmlFor="s-mail">{t("settings.email")}</label><input id="s-mail" dir="ltr" className="min-h-11 w-full rounded border border-muted bg-white px-3 py-2 text-ink transition focus:border-ink focus:outline-none focus:ring-[3px] focus:ring-orange-200 aria-[invalid=true]:border-danger" value={user.email} readOnly /><span className="text-sm text-muted">{t("settings.emailNote")}</span></div>
+              <div className="flex flex-wrap items-center gap-3"><button className="inline-flex min-h-11 items-center justify-center gap-2 rounded border px-5 text-sm font-semibold transition-colors active:translate-y-px disabled:pointer-events-none disabled:opacity-45 border-ink bg-ink text-white hover:bg-[#2a2a2a]" type="submit" disabled={!name.trim()}>{t("common.save")}</button>{saved && <span role="status" className="inline-flex items-center gap-2 text-sm font-bold before:size-[9px] before:rounded-full before:content-[''] before:bg-ok">{t("settings.saved")}</span>}</div>
+            </form>
+          )}
+          {tab === "language" && (
+            <div className="space-y-4">
+              <p className="text-muted">{t("settings.languageHelp")}</p>
+              <div className="inline-flex overflow-hidden rounded border border-ink" role="group" aria-label={t("settings.language")} style={{ width: "fit-content" }}>
+                <button type="button" className="min-h-9 border-0 border-e border-ink bg-white px-4 text-sm last:border-e-0 aria-pressed:bg-ink aria-pressed:text-white" lang="en" aria-pressed={lang === "en"} onClick={() => setLang("en")}>English</button>
+                <button type="button" className="min-h-9 border-0 border-e border-ink bg-white px-4 text-sm last:border-e-0 aria-pressed:bg-ink aria-pressed:text-white" lang="ar" aria-pressed={lang === "ar"} onClick={() => setLang("ar")}>العربية</button>
+              </div>
+            </div>
+          )}
+          {tab === "about" && <p className="max-w-measure">{t("settings.aboutBody")}</p>}
+        </section>
       </div>
     </div>
-  );
-}
-
-function placeholderCopy(key: string) {
-  switch (key) {
-    case "notifications":
-      return "Choose which updates, offers and reminders you receive from ORIVAL and your followed providers.";
-    case "privacy":
-      return "Control who can see your profile, learning activity, and reviews.";
-    case "payment":
-      return "Manage the cards and payment methods used for enrollments.";
-    case "appearance":
-      return "ORIVAL uses a dark interface by default, tuned for long study sessions.";
-    case "language":
-      return "Choose your preferred language and currency for prices across the app.";
-    case "help":
-      return "Browse help articles or contact the ORIVAL support team.";
-    case "about":
-      return "ORIVAL helps you discover what to learn, where to learn it, and who teaches it.";
-    default:
-      return "";
-  }
-}
-
-function Field({
-  label,
-  value,
-  onChange,
-  action,
-  readOnly,
-  type = "text",
-}: {
-  label: string;
-  value: string | undefined;
-  onChange?: (v: string) => void;
-  action?: string;
-  readOnly?: boolean;
-  type?: string;
-}) {
-  return (
-    <label className="flex flex-col gap-1.5">
-      <span className="text-xs font-medium text-ink-muted">{label}</span>
-      <div className="flex items-center gap-2">
-        <input
-          type={type}
-          value={value}
-          readOnly={readOnly}
-          onChange={(e) => onChange?.(e.target.value)}
-          className="flex-1 rounded-lg border border-base-border bg-base-panel2 px-3 py-2 text-sm outline-none focus:border-orival/50 text-ink-muted"
-        />
-        {action && (
-          <button className="rounded-lg border border-base-border px-3 py-2 text-xs font-medium text-ink-secondary hover:text-ink-primary hover:border-base-border2">
-            {action}
-          </button>
-        )}
-      </div>
-    </label>
   );
 }

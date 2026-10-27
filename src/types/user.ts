@@ -1,4 +1,16 @@
 //_____USER_____
+export type AccountRole = "member" | "creator";
+export type CreatorApplicationStatus = "pending" | "approved" | "rejected";
+
+export interface CreatorApplication {
+  status: CreatorApplicationStatus;
+  experience: string;
+  expertise: string;
+  qualifications: string;
+  submittedAt: string;
+  decidedAt?: string;
+}
+
 export interface User {
   name: string;
   handle: string;
@@ -6,46 +18,19 @@ export interface User {
   avatarUrl: string;
   location: string;
   joinedAt: string;
-  password?:string;
-  following?:string[];
-  providerId?:string;
-}
-
-//_____ENROLLMENTS_____
-export type EnrollmentStatus = "not-started" | "in-progress" | "completed";
-export interface Enrollment {
-  courseId: string;
-  status: EnrollmentStatus;
-  progress: number; // 0-100
-  enrolledAt: string;
-  lastLessonId?: string;
+  following?: string[];
+  /** Set by the legacy API for provider accounts; treated as Creator. */
+  providerId?: string;
+  /** Frontend-only role. NOT a security boundary. */
+  role?: AccountRole;
+  creatorApplication?: CreatorApplication;
 }
 
 //_____HISTORY_____
 export interface HistoryEntry {
   id: string;
-  type: "course" | "provider";
+  type: "course" | "video";
   refId: string;
-  viewedAt: string;
+  lessonId?: string;
+  viewedAt: string; // ISO
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
