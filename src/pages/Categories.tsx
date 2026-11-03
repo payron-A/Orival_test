@@ -16,11 +16,19 @@ export default function Categories() {
   return (
     <div className="mx-auto w-full max-w-page px-4 sm:px-6 animate-page-in pb-24 pt-8 min-[960px]:pb-18 min-[960px]:pt-12">
       <PageHead eyebrow={t("nav.categories")} title={t("categories.title")} lede={t("categories.lede")} />
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] border-s border-t border-line">
+      <div className="grid gap-2 grid-cols-[repeat(auto-fill,minmax(220px,1fr))]">
         {categories.filter((c) => counts.has(c.id)).map((c) => (
-          <Link key={c.id} className="group/tile flex items-center justify-between border-b border-e border-line p-6 font-display text-[1.15rem] transition-colors hover:bg-ink hover:text-white" to={exploreHref({ category: c.id })}>
-            <span>{c.name}</span><small className="font-sans text-xs text-muted group-hover/tile:text-orange-200">{counts.get(c.id)}</small>
-          </Link>
+          <Link to={exploreHref({ category: c.id })}
+                          className="flex gap-3 rounded-sm border p-4 hover:b-shadow">
+                      <span  className="inline-flex h-10 items-center"
+                             style={{ color: c.color }}>
+                          <i className={c.icon}style={{fontSize:"23px",textShadow:`2px 2px 4px ${c.color}`}}></i>
+                      </span>
+                      <div>
+                        <div className="text-sm font-semibold text-ink-primary">{c.name}</div>
+                        <div className="text-xs text-ink-muted">{c.courseCount} courses</div>
+                      </div>
+                    </Link>
         ))}
       </div>
     </div>
